@@ -24,7 +24,7 @@ export function InstructorSubscriptionCard({
   instructor,
   showRenewalAction = true
 }: InstructorSubscriptionCardProps) {
-  const [mountedTime, setMountedTime] = useState<number>(() => Date.now());
+  const [mountedTime, setMountedTime] = useState<number | null>(null);
 
   useEffect(() => {
     setMountedTime(Date.now());
@@ -32,7 +32,7 @@ export function InstructorSubscriptionCard({
 
   const isLifetime = instructor.validityType === 'LIFETIME';
   const startDate = new Date(instructor.joinedAt || '2024-09-01T00:00:00Z');
-  const now = new Date(mountedTime);
+  const now = new Date(mountedTime ?? startDate.getTime());
 
   // 1. حساب "مشترك قد إيه" (Elapsed Time)
   const elapsedMs = Math.max(0, now.getTime() - startDate.getTime());

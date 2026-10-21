@@ -53,19 +53,23 @@ export function ExamRunnerModal({ exam, isOpen, onClose }: ExamRunnerModalProps)
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
 
   // Remaining seconds for answering the exam (duration based)
-  const [takingSecondsRemaining, setTakingSecondsRemaining] = useState<number>(() => {
-    if (!existingAttempt) return exam.durationMinutes * 60;
-    const startMs = new Date(existingAttempt.startedAt).getTime();
-    const durationMs = exam.durationMinutes * 60 * 1000;
-    const endMs = startMs + durationMs;
-    return Math.max(0, Math.floor((endMs - Date.now()) / 1000));
-  });
+  const [takingSecondsRemaining, setTakingSecondsRemaining] = useState<number>(exam.durationMinutes * 60);
 
   // Remaining seconds until official exam end date & time (embargo deadline)
-  const [embargoSecondsRemaining, setEmbargoSecondsRemaining] = useState<number>(() => {
-    const deadlineMs = getExamEndDeadlineMs(exam, existingAttempt?.startedAt);
-    return Math.max(0, Math.floor((deadlineMs - Date.now()) / 1000));
-  });
+  const [embargoSecondsRemaining, setEmbargoSecondsRemaining] = useState<number>(0);
+
+  // Sync timers when existingAttempt is present or on mount
+  useEffect(() => {
+    if (existingAttempt) {
+      const startMs = new Date(existingAttempt.startedAt).getTime();
+      const durationMs = exam.durationMinutes * 60 * 1000;
+      const endMs = startMs + durationMs;
+      setTakingSecondsRemaining(Math.max(0, Math.floor((endMs - Date.now()) / 1000)));
+
+      const deadlineMs = getExamEndDeadlineMs(exam, existingAttempt.startedAt);
+      setEmbargoSecondsRemaining(Math.max(0, Math.floor((deadlineMs - Date.now()) / 1000)));
+    }
+  }, [existingAttempt, exam]);
 
   // Start attempt on modal open if not exists
   useEffect(() => {

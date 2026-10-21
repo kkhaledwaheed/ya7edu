@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLMS } from '@/context/lms-context';
 import { VoucherDuration, AcademicGradeId, VoucherCode } from '@/lib/types';
 import { mockAcademicGrades, mockSubjects } from '@/lib/mock-data/grades-subjects';
@@ -29,6 +29,11 @@ export default function AdminVouchersPage() {
   const { vouchers, generateVouchers, users, academicGrades, allSubjects } = useLMS();
 
   const instructors = users.filter(u => u.role === 'INSTRUCTOR');
+  const [printDateStr, setPrintDateStr] = useState('2026/10/21');
+
+  useEffect(() => {
+    setPrintDateStr(new Date().toLocaleDateString('ar-EG'));
+  }, []);
 
   // نموذج التوليد
   const [selectedInstructorId, setSelectedInstructorId] = useState(instructors[0]?.id || 'inst_ahmed_samy');
@@ -497,7 +502,7 @@ export default function AdminVouchersPage() {
                         منصة YA7EDU التعليمية &bull; كروت شحن الطلاب
                       </h2>
                       <p className="text-[11px] text-gray-600 font-semibold">
-                        مطبوعات السناتر والمكتبات المعتمدة للثانوية العامة &bull; {new Date().toLocaleDateString('ar-EG')}
+                        مطبوعات السناتر والمكتبات المعتمدة للثانوية العامة &bull; {printDateStr}
                       </p>
                     </div>
                   </div>

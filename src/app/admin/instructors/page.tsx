@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLMS } from '@/context/lms-context';
 import { User, AcademicGradeId, PlatformValidityType, UserStatus } from '@/lib/types';
@@ -69,17 +69,25 @@ export default function AdminInstructorsPage() {
   const [editGrades, setEditGrades] = useState<AcademicGradeId[]>([]);
   const [editSubjects, setEditSubjects] = useState<string[]>([]);
 
+  const [mountedTime, setMountedTime] = useState<number | null>(null);
+
+  useEffect(() => {
+    setMountedTime(Date.now());
+  }, []);
+
   // دوال التحقق من الصلاحية
   const isInstructorExpired = (instructor: User) => {
     if (instructor.validityType === 'LIFETIME') return false;
     if (!instructor.validityExpiresAt) return false;
-    return new Date(instructor.validityExpiresAt) < new Date();
+    if (!mountedTime) return false;
+    return new Date(instructor.validityExpiresAt).getTime() < mountedTime;
   };
 
   const getRemainingDays = (instructor: User) => {
     if (instructor.validityType === 'LIFETIME') return null;
     if (!instructor.validityExpiresAt) return null;
-    const diff = new Date(instructor.validityExpiresAt).getTime() - Date.now();
+    if (!mountedTime) return null;
+    const diff = new Date(instructor.validityExpiresAt).getTime() - mountedTime;
     return Math.max(0, Math.ceil(diff / (1000 * 3600 * 24)));
   };
 
@@ -430,7 +438,7 @@ export default function AdminInstructorsPage() {
                         <div>
                           <span className="text-xs text-emerald-400 font-bold block">نشط دائم (مدى الحياة)</span>
                           <span className="text-[10px] text-gray-400 font-mono block mt-0.5">
-                            مشترك منذ: {Math.max(1, Math.floor((Date.now() - new Date(inst.joinedAt || '2023-01-01').getTime()) / (1000 * 3600 * 24 * 30)))} شهر
+                            مشترك منذ: {Math.max(1, Math.floor(((mountedTime || new Date(inst.joinedAt || '2023-01-01').getTime()) - new Date(inst.joinedAt || '2023-01-01').getTime()) / (1000 * 3600 * 24 * 30)))} شهر
                           </span>
                         </div>
                       ) : isExpired ? (
@@ -440,7 +448,7 @@ export default function AdminInstructorsPage() {
                             <span>منتهي الصلاحية</span>
                           </div>
                           <span className="text-[10px] text-gray-500 font-mono block mt-0.5">
-                            كان مشتركاً منذ {Math.max(1, Math.floor((Date.now() - new Date(inst.joinedAt || '2023-01-01').getTime()) / (1000 * 3600 * 24 * 30)))} شهر
+                            كان مشتركاً منذ {Math.max(1, Math.floor(((mountedTime || new Date(inst.joinedAt || '2023-01-01').getTime()) - new Date(inst.joinedAt || '2023-01-01').getTime()) / (1000 * 3600 * 24 * 30)))} شهر
                           </span>
                         </div>
                       ) : (
@@ -459,7 +467,7 @@ export default function AdminInstructorsPage() {
                             </div>
                           )}
                           <div className="text-[10px] text-gray-400 font-mono mt-0.5">
-                            مشترك منذ: {Math.max(1, Math.floor((Date.now() - new Date(inst.joinedAt || '2023-01-01').getTime()) / (1000 * 3600 * 24 * 30)))} شهر
+                            مشترك منذ: {Math.max(1, Math.floor(((mountedTime || new Date(inst.joinedAt || '2023-01-01').getTime()) - new Date(inst.joinedAt || '2023-01-01').getTime()) / (1000 * 3600 * 24 * 30)))} شهر
                           </div>
                         </div>
                       )}

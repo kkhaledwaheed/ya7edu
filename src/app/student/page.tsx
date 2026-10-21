@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useLMS } from '@/context/lms-context';
 import {
@@ -31,6 +31,11 @@ export default function StudentDashboardPage() {
 
   // Selected subject in discovery flow
   const [selectedSubjectId, setSelectedSubjectId] = useState<string>(gradeSubjects[0]?.id || 'subj_g3_phys');
+  const [mountedTime, setMountedTime] = useState<number | null>(null);
+
+  useEffect(() => {
+    setMountedTime(Date.now());
+  }, []);
   
   // Subscription modal state
   const [modalOpen, setModalOpen] = useState(false);
@@ -161,7 +166,9 @@ export default function StudentDashboardPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {activeSubs.map(sub => {
             const expDate = new Date(sub.expiresAt);
-            const daysRemaining = Math.max(0, Math.ceil((expDate.getTime() - Date.now()) / (1000 * 3600 * 24)));
+            const daysRemaining = mountedTime
+              ? Math.max(0, Math.ceil((expDate.getTime() - mountedTime) / (1000 * 3600 * 24)))
+              : 30;
 
             return (
               <div

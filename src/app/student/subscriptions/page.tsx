@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useLMS } from '@/context/lms-context';
 import {
@@ -21,6 +21,11 @@ export default function StudentSubscriptionsPage() {
 
   const [inputCode, setInputCode] = useState('');
   const [alert, setAlert] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [mountedTime, setMountedTime] = useState<number | null>(null);
+
+  useEffect(() => {
+    setMountedTime(Date.now());
+  }, []);
 
   const mySubs = subscriptions.filter(s => s.studentId === currentUser.id);
   const activeSubs = mySubs.filter(s => s.status === 'ACTIVE');
@@ -125,7 +130,9 @@ export default function StudentSubscriptionsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {activeSubs.map(sub => {
               const expDate = new Date(sub.expiresAt);
-              const daysRemaining = Math.max(0, Math.ceil((expDate.getTime() - Date.now()) / (1000 * 3600 * 24)));
+              const daysRemaining = mountedTime
+                ? Math.max(0, Math.ceil((expDate.getTime() - mountedTime) / (1000 * 3600 * 24)))
+                : 30;
 
               return (
                 <div
