@@ -1,0 +1,299 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  INSTRUCTOR
+  STUDENT
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  PENDING_VERIFICATION
+}
+
+enum CourseStatus {
+  DRAFT
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum CourseLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  ALL_LEVELS
+}
+
+enum PayoutStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  PAID
+}
+
+enum TransactionStatus {
+  COMPLETED
+  REFUNDED
+  FAILED
+}
+
+model User {
+  id             String        @id @default(uuid())
+  email          String        @unique
+  name           String
+  role           String        @default("STUDENT") // "ADMIN" | "INSTRUCTOR" | "STUDENT"
+  status         String        @default("ACTIVE")  // "ACTIVE" | "SUSPENDED"
+  avatar         String?
+  headline       String?
+  bio            String?
+  passwordHash   String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  // Relationships
+  profile        Profile?
+  authoredCourses Course[]     @relation("InstructorCourses")
+  enrollments    Enrollment[]
+  progress       Progress[]
+  quizSubmissions QuizSubmission[]
+  reviews        Review[]
+  transactions   Transaction[]
+  payouts        Payout[]
+  auditLogs      AuditLog[]
+
+  @@index([role])
+  @@index([status])
+}
+
+model Profile {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  website         String?
+  twitter         String?
+  github          String?
+  linkedin        String?
+  payoutMethod    String?  // e.g. "STRIPE", "PAYPAL", "BANK_TRANSFER"
+  payoutAccount   String?
+  notificationsEnabled Boolean @default(true)
+  updatedAt       DateTime @updatedAt
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  icon        String?
+  courses     Course[]
+}
+
+model Course {
+  id              String       @id @default(uuid())
+  title           String
+  slug            String       @unique
+  subtitle        String?
+  description     String
+  thumbnail       String?
+  previewVideoUrl String?
+  price           Float        @default(0.0)
+  discountPrice   Float?
+  level           String       @default("ALL_LEVELS")
+  status          String       @default("DRAFT") // "DRAFT" | "PENDING_REVIEW" | "APPROVED" | "REJECTED"
+  rejectionReason String?
+  publishedAt     DateTime?
+  categoryId      String?
+  category        Category?    @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  instructorId    String
+  instructor      User         @relation("InstructorCourses", fields: [instructorId], references: [id], onDelete: Cascade)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  sections        Section[]
+  enrollments     Enrollment[]
+  reviews         Review[]
+  transactions    Transaction[]
+
+  @@index([instructorId])
+  @@index([status])
+  @@index([categoryId])
+}
+
+model Section {
+  id          String   @id @default(uuid())
+  title       String
+  orderIndex  Int      @default(0)
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons     Lesson[]
+  createdAt   DateTime @default(now())
+
+  @@index([courseId])
+}
+
+model Lesson {
+  id               String       @id @default(uuid())
+  title            String
+  slug             String?
+  description      String?
+  videoUrl         String?
+  durationSeconds  Int          @default(0)
+  orderIndex       Int          @default(0)
+  isPreview        Boolean      @default(false)
+  resources        String?      // JSON string of downloadable materials
+  articleContent   String?      // Rich text or markdown notes
+  sectionId        String
+  section          Section      @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  quiz             Quiz?
+  progressRecords  Progress[]
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  @@index([sectionId])
+}
+
+model Quiz {
+  id                String           @id @default(uuid())
+  lessonId          String           @unique
+  lesson            Lesson           @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  title             String
+  description       String?
+  passingScore      Int              @default(75) // Percentage e.g. 75%
+  timeLimitMinutes  Int              @default(15)
+  questions         String           // JSON serialized array of questions with options, correct answer, explanation
+  submissions       QuizSubmission[]
+  createdAt         DateTime         @default(now())
+}
+
+model QuizSubmission {
+  id              String   @id @default(uuid())
+  quizId          String
+  quiz            Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  score           Float
+  passed          Boolean
+  answers         String   // JSON string of submitted answers
+  feedback        String?
+  completedAt     DateTime @default(now())
+
+  @@index([quizId])
+  @@index([userId])
+}
+
+model Enrollment {
+  id              String    @id @default(uuid())
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId        String
+  course          Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  progressPercent Float     @default(0.0)
+  completedAt     DateTime?
+  certificateId   String?   @unique
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@unique([userId, courseId])
+  @@index([userId])
+  @@index([courseId])
+}
+
+model Progress {
+  id                 String   @id @default(uuid())
+  userId             String
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lessonId           String
+  lesson             Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  isCompleted        Boolean  @default(false)
+  lastWatchedSecond  Int      @default(0)
+  updatedAt          DateTime @updatedAt
+
+  @@unique([userId, lessonId])
+  @@index([userId])
+  @@index([lessonId])
+}
+
+model Review {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId        String
+  course          Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  rating          Int      // 1 to 5
+  comment         String
+  instructorReply String?
+  replyCreatedAt  DateTime?
+  createdAt       DateTime @default(now())
+
+  @@unique([userId, courseId])
+  @@index([courseId])
+}
+
+model Transaction {
+  id                 String   @id @default(uuid())
+  userId             String
+  user               User     @relation(fields: [userId], references: [id], onDelete: Restrict)
+  courseId           String
+  course             Course   @relation(fields: [courseId], references: [id], onDelete: Restrict)
+  amount             Float
+  platformFee        Float
+  instructorEarning  Float
+  status             String   @default("COMPLETED") // "COMPLETED" | "REFUNDED" | "FAILED"
+  paymentIntentId    String?
+  receiptUrl         String?
+  createdAt          DateTime @default(now())
+
+  @@index([userId])
+  @@index([courseId])
+}
+
+model Payout {
+  id             String    @id @default(uuid())
+  instructorId   String
+  instructor     User      @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+  amount         Float
+  status         String    @default("PENDING") // "PENDING" | "APPROVED" | "REJECTED" | "PAID"
+  payoutMethod   String    @default("STRIPE_CONNECT")
+  accountDetails String?
+  notes          String?
+  requestedAt    DateTime  @default(now())
+  processedAt    DateTime?
+
+  @@index([instructorId])
+  @@index([status])
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action     String   // e.g. "USER_ROLE_CHANGED", "COURSE_APPROVED", "PAYOUT_PROCESSED"
+  entityType String   // e.g. "COURSE", "USER", "PAYOUT"
+  entityId   String?
+  metadata   String?  // JSON details
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@index([action])
+}
+
+model SystemConfig {
+  id                      String   @id @default("default")
+  platformCommissionRate  Float    @default(15.0) // 15% platform cut
+  payoutMinimumThreshold  Float    @default(50.0) // $50 min payout
+  bannerAnnouncement      String?  @default("🚀 Welcome to LMS Pro. Spring Enrollment is now open!")
+  isMaintenanceMode       Boolean  @default(false)
+  updatedAt               DateTime @updatedAt
+}
