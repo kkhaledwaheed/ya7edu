@@ -57,9 +57,9 @@ export interface TeacherSubscription {
   activatedAt: string;
   expiresAt: string;
   durationLabel: string;
-  paymentMethod: 'VOUCHER_CARD' | 'CREDIT_CARD' | 'DIGITAL_WALLET';
+  paymentMethod: 'VOUCHER_CARD' | 'CREDIT_CARD' | 'DIGITAL_WALLET' | 'WHATSAPP_ADMIN_TRANSFER';
   voucherCodeUsed?: string;
-  status: 'ACTIVE' | 'EXPIRED';
+  status: 'ACTIVE' | 'EXPIRED' | 'PENDING_ADMIN_PAYMENT';
 }
 
 export interface LessonVideo {

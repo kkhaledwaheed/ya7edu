@@ -52,6 +52,12 @@ interface LMSContextType {
   switchRole: (role: UserRole) => void;
   impersonateUser: (userId: string) => void;
   stopImpersonating: () => void;
+  loginUser: (user: User) => void;
+  logout: () => void;
+  isLoadingLiveDb: boolean;
+  isLiveDbReady: boolean;
+  refreshLMSData: () => Promise<void>;
+  isHydrated: boolean;
   
   // Grade-Locked Student Architecture & Admin Grade Management
   studentGradeId: AcademicGradeId;
@@ -79,6 +85,13 @@ interface LMSContextType {
     method: 'CREDIT_CARD' | 'DIGITAL_WALLET'
   ) => TeacherSubscription;
   redeemVoucher: (code: string) => { success: boolean; message: string; subscription?: TeacherSubscription };
+  adminActivateSubscription: (data: {
+    studentId: string;
+    instructorId: string;
+    subjectId: string;
+    duration: VoucherDuration;
+    notes?: string;
+  }) => Promise<{ success: boolean; message: string; subscription?: TeacherSubscription }>;
   generateVouchers: (
     instructorId: string,
     subjectId: string,
@@ -161,14 +174,15 @@ interface LMSContextType {
 const LMSContext = createContext<LMSContextType | undefined>(undefined);
 
 export function LMSProvider({ children }: { children: React.ReactNode }) {
-  // Current user state (defaults to student Sophia Rodriguez)
-  const [currentUser, setCurrentUser] = useState<User>(mockUsers[4]);
+  // Current user state (consistently initialized for SSR, hydrated from localStorage in useEffect)
+  const [currentUser, setCurrentUser] = useState<User>(mockUsers[0]);
   const [impersonatedByAdmin, setImpersonatedByAdmin] = useState(false);
+  const [isLoadingLiveDb, setIsLoadingLiveDb] = useState(true);
+  const [isLiveDbReady, setIsLiveDbReady] = useState(false);
+  const [isHydrated, setIsHydrated] = useState<boolean>(false);
 
   // Grade-Locked Student Architecture (Grade 3 Secondary Thanawya Amma by default)
-  const [studentGradeId, setStudentGradeIdState] = useState<AcademicGradeId>(
-    (currentUser.gradeId as AcademicGradeId) || 'grade_sec_3'
-  );
+  const [studentGradeId, setStudentGradeIdState] = useState<AcademicGradeId>('grade_sec_3');
 
   // Subscriptions & Vouchers
   const [subscriptions, setSubscriptions] = useState<TeacherSubscription[]>(mockSubscriptions);
@@ -187,21 +201,91 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
   const [platformConfig, setPlatformConfig] = useState<PlatformConfig>(initialPlatformConfig);
 
   // Dynamic Academic Grades & Subjects (Admin controllable)
-  const [academicGrades, setAcademicGrades] = useState<AcademicGrade[]>(() => {
-    try {
-      const stored = localStorage.getItem('ya7edu_academic_grades');
-      if (stored) return JSON.parse(stored);
-    } catch {}
-    return mockAcademicGrades;
-  });
+  const [academicGrades, setAcademicGrades] = useState<AcademicGrade[]>(mockAcademicGrades);
+  const [allSubjects, setAllSubjects] = useState<Subject[]>(mockSubjects);
 
-  const [allSubjects, setAllSubjects] = useState<Subject[]>(() => {
+  // Hydrate user session, grades, and subjects from localStorage on mount
+  useEffect(() => {
     try {
-      const stored = localStorage.getItem('ya7edu_all_subjects');
-      if (stored) return JSON.parse(stored);
-    } catch {}
-    return mockSubjects;
-  });
+      const stored = localStorage.getItem('ya7edu_session_user');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed && parsed.id) {
+          setCurrentUser(parsed);
+          if (parsed.gradeId) {
+            setStudentGradeIdState(parsed.gradeId);
+          }
+        }
+      }
+      const storedGrades = localStorage.getItem('ya7edu_academic_grades');
+      if (storedGrades) {
+        const parsedGrades = JSON.parse(storedGrades);
+        if (Array.isArray(parsedGrades) && parsedGrades.length > 0) {
+          setAcademicGrades(parsedGrades);
+        }
+      }
+      const storedSubjects = localStorage.getItem('ya7edu_all_subjects');
+      if (storedSubjects) {
+        const parsedSubjects = JSON.parse(storedSubjects);
+        if (Array.isArray(parsedSubjects) && parsedSubjects.length > 0) {
+          setAllSubjects(parsedSubjects);
+        }
+      }
+    } catch (e) {
+      console.warn('LMS Context localStorage hydration error:', e);
+    } finally {
+      setIsHydrated(true);
+    }
+  }, []);
+
+  // Fetch live data directly from VPS MySQL via Next.js bootstrap API
+  const refreshLMSData = async () => {
+    try {
+      setIsLoadingLiveDb(true);
+      const res = await fetch(`/api/lms/bootstrap?t=${Date.now()}`, {
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache' }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          if (data.grades?.length) setAcademicGrades(data.grades);
+          if (data.subjects?.length) setAllSubjects(data.subjects);
+          if (data.users?.length) {
+            setUsers(data.users);
+            // Refresh active session profile if user is logged in
+            const storedUserStr = localStorage.getItem('ya7edu_session_user');
+            if (storedUserStr) {
+              const storedUser = JSON.parse(storedUserStr);
+              const matched = data.users.find((u: User) => u.id === storedUser.id || u.email === storedUser.email);
+              if (matched) {
+                setCurrentUser(matched);
+                localStorage.setItem('ya7edu_session_user', JSON.stringify(matched));
+              } else {
+                setCurrentUser(storedUser);
+              }
+            }
+          }
+          if (data.instructorContents) setInstructorContents(data.instructorContents);
+          if (data.vouchers) setVouchers(data.vouchers);
+          if (data.instructorExams) setInstructorExams(data.instructorExams);
+          if (data.subscriptions) setSubscriptions(data.subscriptions);
+          if (data.courses && data.courses.length > 0) setCourses(data.courses);
+          if (data.payoutRequests) setPayoutRequests(data.payoutRequests);
+          if (data.platformConfig) setPlatformConfig(data.platformConfig);
+        }
+      }
+    } catch (err) {
+      console.warn('LMS live DB bootstrap notice:', err);
+    } finally {
+      setIsLoadingLiveDb(false);
+      setIsLiveDbReady(true);
+    }
+  };
+
+  useEffect(() => {
+    refreshLMSData();
+  }, []);
 
   useEffect(() => {
     try {
@@ -225,6 +309,33 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
     } catch {}
   }, []);
 
+  const loginUser = (user: User) => {
+    setCurrentUser(user);
+    setUsers(prev => {
+      const exists = prev.some(u => u.id === user.id || u.email === user.email);
+      if (!exists) return [user, ...prev];
+      return prev.map(u => (u.id === user.id ? user : u));
+    });
+    try {
+      localStorage.setItem('ya7edu_session_user', JSON.stringify(user));
+      if (user.gradeId) {
+        setStudentGradeIdState(user.gradeId as AcademicGradeId);
+        localStorage.setItem('ya7edu_student_grade', user.gradeId);
+      }
+    } catch {}
+  };
+
+  const logout = () => {
+    try {
+      localStorage.removeItem('ya7edu_session_user');
+    } catch {}
+    const defaultStudent = users.find(u => u.role === 'STUDENT') || mockUsers[4];
+    setCurrentUser(defaultStudent);
+    if (typeof window !== 'undefined') {
+      window.location.href = '/login';
+    }
+  };
+
   const setStudentGradeId = (gradeId: AcademicGradeId) => {
     setStudentGradeIdState(gradeId);
     try {
@@ -242,7 +353,7 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
   const gradeSubjects = allSubjects.filter(s => s.gradeId === studentGradeId);
 
   const addGrade = (newGrade: { nameAr: string; nameEn?: string; stage?: string; description?: string }): AcademicGrade => {
-    const id = `grade_${Date.now()}`;
+    const id = `grade_sec_${Date.now()}`;
     const grade: AcademicGrade = {
       id,
       nameAr: newGrade.nameAr,
@@ -252,19 +363,39 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
     };
     setAcademicGrades(prev => [...prev, grade]);
     logAudit('CREATE_GRADE', `إضافة صف دراسي جديد: ${grade.nameAr}`);
+
+    fetch('/api/grades', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newGrade)
+    }).then(r => r.json()).then(data => {
+      if (data.success && data.grade) {
+        setAcademicGrades(prev => prev.map(g => g.id === id ? data.grade : g));
+      }
+    }).catch(err => console.error('Failed to persist grade to VPS:', err));
+
     return grade;
   };
 
   const updateGrade = (id: string, updates: Partial<AcademicGrade>) => {
     setAcademicGrades(prev => prev.map(g => (g.id === id ? { ...g, ...updates } : g)));
     logAudit('UPDATE_GRADE', `تعديل بيانات الصف الدراسي: ${id}`);
+
+    fetch('/api/grades', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, ...updates })
+    }).catch(err => console.error('Failed to update grade on VPS:', err));
   };
 
   const deleteGrade = (id: string) => {
     setAcademicGrades(prev => prev.filter(g => g.id !== id));
-    // Also remove subjects belonging to this grade
     setAllSubjects(prev => prev.filter(s => s.gradeId !== id));
     logAudit('DELETE_GRADE', `حذف الصف الدراسي وكافة مواده المرتبطة: ${id}`);
+
+    fetch(`/api/grades?id=${encodeURIComponent(id)}`, {
+      method: 'DELETE'
+    }).catch(err => console.error('Failed to delete grade from VPS:', err));
   };
 
   const addSubject = (newSubject: {
@@ -287,17 +418,38 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
     };
     setAllSubjects(prev => [...prev, subject]);
     logAudit('CREATE_SUBJECT', `إضافة مادة جديدة: ${subject.nameAr}`);
+
+    fetch('/api/subjects', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newSubject)
+    }).then(r => r.json()).then(data => {
+      if (data.success && data.subject) {
+        setAllSubjects(prev => prev.map(s => s.id === id ? data.subject : s));
+      }
+    }).catch(err => console.error('Failed to persist subject to VPS:', err));
+
     return subject;
   };
 
   const updateSubject = (id: string, updates: Partial<Subject>) => {
     setAllSubjects(prev => prev.map(s => (s.id === id ? { ...s, ...updates } : s)));
     logAudit('UPDATE_SUBJECT', `تعديل المادة الدراسية: ${id}`);
+
+    fetch('/api/subjects', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, ...updates })
+    }).catch(err => console.error('Failed to update subject on VPS:', err));
   };
 
   const deleteSubject = (id: string) => {
     setAllSubjects(prev => prev.filter(s => s.id !== id));
     logAudit('DELETE_SUBJECT', `حذف المادة الدراسية: ${id}`);
+
+    fetch(`/api/subjects?id=${encodeURIComponent(id)}`, {
+      method: 'DELETE'
+    }).catch(err => console.error('Failed to delete subject from VPS:', err));
   };
 
   const logAudit = (action: string, details: string, actorName = currentUser.name, actorRole = currentUser.role) => {
@@ -396,6 +548,20 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
     };
 
     setSubscriptions(prev => [newSub, ...prev]);
+
+    fetch('/api/subscriptions/admin-activate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        studentId: currentUser.id,
+        instructorId,
+        subjectId,
+        duration,
+        paymentMethod: method,
+        notes: 'Online direct card / wallet subscription'
+      })
+    }).catch(err => console.error('Direct subscription persist error:', err));
+
     logAudit(
       'DIRECT_SUBSCRIPTION_PURCHASED',
       `Student ${currentUser.name} purchased ${durationMap[duration].label} for ${newSub.instructorName} via ${method}`
@@ -460,6 +626,18 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
     // Save subscription
     setSubscriptions(prev => [newSub, ...prev]);
 
+    // Dispatch background sync to VPS MySQL database
+    fetch('/api/vouchers/redeem', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        code: cleanCode,
+        studentId: currentUser.id,
+        instructorId: targetVoucher.instructorId,
+        subjectId: targetVoucher.subjectId
+      })
+    }).catch(err => console.warn('VPS voucher sync notice:', err));
+
     logAudit(
       'VOUCHER_REDEEMED',
       `Student ${currentUser.name} redeemed scratch card ${targetVoucher.code} for ${targetVoucher.instructorName} (${targetVoucher.durationLabelEn})`
@@ -470,6 +648,37 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
       message: `Card redeemed successfully! Unlocked ${targetVoucher.durationLabelAr} with ${targetVoucher.instructorName}.`,
       subscription: newSub
     };
+  };
+
+  const adminActivateSubscription = async (data: {
+    studentId: string;
+    instructorId: string;
+    subjectId: string;
+    duration: VoucherDuration;
+    notes?: string;
+  }) => {
+    try {
+      const res = await fetch('/api/subscriptions/admin-activate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const result = await res.json();
+      if (result.success && result.subscription) {
+        setSubscriptions(prev => {
+          const filtered = prev.filter(s => s.id !== result.subscription.id);
+          return [result.subscription, ...filtered];
+        });
+        logAudit(
+          'ADMIN_ACTIVATED_SUBSCRIPTION',
+          `Admin activated subscription for student ${result.subscription.studentId} with ${result.subscription.instructorName} (${result.subscription.durationLabel})`
+        );
+        return { success: true, message: result.message, subscription: result.subscription };
+      }
+      return { success: false, message: result.error || 'تعذر تفعيل الاشتراك' };
+    } catch (err: any) {
+      return { success: false, message: err.message };
+    }
   };
 
   // Admin Batch Voucher Generator
@@ -518,6 +727,21 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
     }
 
     setVouchers(prev => [...newBatch, ...prev]);
+
+    // Dispatch background creation to VPS MySQL database
+    fetch('/api/vouchers/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        instructorId,
+        subjectId,
+        gradeId,
+        duration,
+        count,
+        priceLabel: priceLabel || '150 ج.م'
+      })
+    }).catch(err => console.warn('VPS voucher generate notice:', err));
+
     logAudit('VOUCHERS_GENERATED', `Admin generated batch of ${count} voucher cards (${duration}, ${priceLabel || '150 ج.م'}) for ${instructor.name}`);
     return newBatch;
   };
@@ -669,6 +893,19 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
 
     setInstructorContents(prev => [newContent, ...prev]);
 
+    fetch('/api/admin/instructors', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(r => r.json()).then(res => {
+      if (res.success && res.instructor) {
+        setUsers(prev => prev.map(u => u.id === newId ? res.instructor : u));
+        if (res.content) {
+          setInstructorContents(prev => prev.map(c => c.id === newContent.id ? res.content : c));
+        }
+      }
+    }).catch(err => console.error('Failed to persist instructor to VPS:', err));
+
     logAudit(
       'INSTRUCTOR_CREATED_BY_ADMIN',
       `Admin created instructor ${data.name} with validity ${data.validityDurationLabel} (${data.validityType})`
@@ -697,6 +934,12 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
         return u;
       })
     );
+
+    fetch('/api/admin/instructors', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ instructorId, ...updates })
+    }).catch(err => console.error('Failed to update instructor validity in VPS:', err));
 
     logAudit(
       'INSTRUCTOR_SUBSCRIPTION_UPDATED',
@@ -730,26 +973,71 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
     );
   };
 
-  const addChapter = (contentId: string, titleEn: string, titleAr: string) => {
+  const addChapter = async (contentId: string, titleEn: string, titleAr: string) => {
+    const tempId = `chap_${Date.now()}`;
+    const newChap: Chapter = {
+      id: tempId,
+      chapterNumber: 99,
+      titleEn: titleEn || titleAr,
+      titleAr,
+      lessons: []
+    };
+
     setInstructorContents(prev =>
       prev.map(c => {
         if (c.id === contentId) {
-          const newChap: Chapter = {
-            id: `chap_${Date.now()}`,
-            chapterNumber: c.chapters.length + 1,
-            titleEn,
-            titleAr,
-            lessons: []
-          };
-          return { ...c, chapters: [...c.chapters, newChap] };
+          return { ...c, chapters: [...c.chapters, { ...newChap, chapterNumber: c.chapters.length + 1 }] };
         }
         return c;
       })
     );
+
+    try {
+      const res = await fetch('/api/instructor/content', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'ADD_CHAPTER',
+          contentId,
+          titleAr,
+          titleEn
+        })
+      });
+      const data = await res.json();
+      if (data.success && data.chapter) {
+        setInstructorContents(prev =>
+          prev.map(c => {
+            if (c.id === contentId) {
+              return {
+                ...c,
+                chapters: c.chapters.map(ch => (ch.id === tempId ? { ...ch, id: data.chapter.id } : ch))
+              };
+            }
+            return c;
+          })
+        );
+      }
+    } catch (err) {
+      console.error('Failed to persist chapter to VPS:', err);
+    }
+
     logAudit('CHAPTER_ADDED', `Instructor added new chapter: ${titleEn} (${titleAr})`);
   };
 
-  const addLessonToChapter = (contentId: string, chapterId: string, lessonData: Partial<LessonVideo>) => {
+  const addLessonToChapter = async (contentId: string, chapterId: string, lessonData: Partial<LessonVideo>) => {
+    const tempId = `les_${Date.now()}`;
+    const newLesson: LessonVideo = {
+      id: tempId,
+      titleEn: lessonData.titleEn || 'New Lecture',
+      titleAr: lessonData.titleAr || 'محاضرة جديدة',
+      durationMinutes: lessonData.durationMinutes || 45,
+      videoUrl: lessonData.videoUrl || '',
+      order: 99,
+      notes: lessonData.notes,
+      isFree: Boolean(lessonData.isFree)
+    };
+
+    // Optimistic local update
     setInstructorContents(prev =>
       prev.map(c => {
         if (c.id === contentId) {
@@ -757,17 +1045,7 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
             ...c,
             chapters: c.chapters.map(chap => {
               if (chap.id === chapterId) {
-                const newLesson: LessonVideo = {
-                  id: `les_${Date.now()}`,
-                  titleEn: lessonData.titleEn || 'New Lecture',
-                  titleAr: lessonData.titleAr || 'محاضرة جديدة',
-                  durationMinutes: lessonData.durationMinutes || 45,
-                  videoUrl: lessonData.videoUrl || 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-                  order: chap.lessons.length + 1,
-                  notes: lessonData.notes,
-                  isFree: lessonData.isFree ?? (chap.lessons.length < 2)
-                };
-                return { ...chap, lessons: [...chap.lessons, newLesson] };
+                return { ...chap, lessons: [...chap.lessons, { ...newLesson, order: chap.lessons.length + 1 }] };
               }
               return chap;
             })
@@ -776,9 +1054,54 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
         return c;
       })
     );
+
+    // Persist to VPS database
+    try {
+      const res = await fetch('/api/instructor/content', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'ADD_LESSON',
+          contentId,
+          chapterId,
+          lesson: {
+            titleAr: lessonData.titleAr,
+            titleEn: lessonData.titleEn,
+            durationMinutes: lessonData.durationMinutes,
+            videoUrl: lessonData.videoUrl,
+            isFree: lessonData.isFree,
+            notes: lessonData.notes
+          }
+        })
+      });
+      const data = await res.json();
+      if (data.success && data.lesson) {
+        setInstructorContents(prev =>
+          prev.map(c => {
+            if (c.id === contentId) {
+              return {
+                ...c,
+                chapters: c.chapters.map(chap => {
+                  if (chap.id === chapterId) {
+                    return {
+                      ...chap,
+                      lessons: chap.lessons.map(l => (l.id === tempId ? { ...l, id: data.lesson.id } : l))
+                    };
+                  }
+                  return chap;
+                })
+              };
+            }
+            return c;
+          })
+        );
+      }
+    } catch (err) {
+      console.error('Failed to persist lesson to VPS:', err);
+    }
   };
 
-  const deleteLessonFromChapter = (contentId: string, chapterId: string, lessonId: string) => {
+  const deleteLessonFromChapter = async (contentId: string, chapterId: string, lessonId: string) => {
     setInstructorContents(prev =>
       prev.map(c => {
         if (c.id === contentId) {
@@ -798,11 +1121,25 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
         return c;
       })
     );
+
+    try {
+      await fetch('/api/instructor/content', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'DELETE_LESSON',
+          lessonId
+        })
+      });
+    } catch (err) {
+      console.error('Failed to delete lesson from VPS:', err);
+    }
   };
 
-  const addBookletItem = (contentId: string, itemData: Partial<BookletItem>) => {
+  const addBookletItem = async (contentId: string, itemData: Partial<BookletItem>) => {
+    const tempId = `bk_${Date.now()}`;
     const newItem: BookletItem = {
-      id: `bkt_${Date.now()}`,
+      id: tempId,
       titleEn: itemData.titleEn || 'New Material',
       titleAr: itemData.titleAr || 'ملف جديد',
       chapterTitle: itemData.chapterTitle,
@@ -833,9 +1170,41 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
         return c;
       })
     );
+
+    try {
+      const res = await fetch('/api/instructor/content', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'ADD_BOOKLET',
+          contentId,
+          item: itemData
+        })
+      });
+      const data = await res.json();
+      if (data.success && data.item) {
+        setInstructorContents(prev =>
+          prev.map(c => {
+            if (c.id === contentId) {
+              const swapId = (list: BookletItem[]) =>
+                list.map(b => (b.id === tempId ? { ...b, id: data.item.id } : b));
+              return {
+                ...c,
+                booklets: swapId(c.booklets),
+                revisions: swapId(c.revisions),
+                ya7eduBooklets: swapId(c.ya7eduBooklets)
+              };
+            }
+            return c;
+          })
+        );
+      }
+    } catch (err) {
+      console.error('Failed to persist booklet to VPS:', err);
+    }
   };
 
-  const deleteBookletItem = (contentId: string, itemId: string) => {
+  const deleteBookletItem = async (contentId: string, itemId: string) => {
     setInstructorContents(prev =>
       prev.map(c => {
         if (c.id === contentId) {
@@ -849,13 +1218,27 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
         return c;
       })
     );
+
+    try {
+      await fetch('/api/instructor/content', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'DELETE_BOOKLET',
+          itemId
+        })
+      });
+    } catch (err) {
+      console.error('Failed to delete booklet from VPS:', err);
+    }
   };
 
   // Instructor Exams Management & Embargo Logic
   const createInstructorExam = (examData: Omit<InstructorExam, 'id' | 'createdAt'>): InstructorExam => {
+    const tempId = `exam_${Date.now()}`;
     const newExam: InstructorExam = {
       ...examData,
-      id: `exam_${Date.now()}`,
+      id: tempId,
       createdAt: new Date().toISOString()
     };
     setInstructorExams(prev => [newExam, ...prev]);
@@ -870,6 +1253,25 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
         return c;
       })
     );
+
+    // Persist to VPS database
+    fetch('/api/instructor/content', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'CREATE_EXAM',
+        exam: examData
+      })
+    }).then(r => r.json()).then(data => {
+      if (data.success && data.examId) {
+        setInstructorExams(prev =>
+          prev.map(ex => (ex.id === tempId ? { ...ex, id: data.examId } : ex))
+        );
+      }
+    }).catch(err => {
+      console.error('Failed to persist exam to VPS:', err);
+    });
+
     logAudit(
       'EXAM_CREATED',
       `Instructor ${examData.instructorName} created exam: ${examData.title} (${examData.durationMinutes} min, Hide result: ${examData.hideResultUntilDurationEnds ? 'Yes' : 'No'})`
@@ -899,6 +1301,12 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
       }))
     );
     logAudit('EXAM_DELETED', `Exam ${examId} deleted`);
+
+    fetch('/api/instructor/content', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'DELETE_EXAM', examId })
+    }).catch(err => console.error('Failed to delete exam from VPS:', err));
   };
 
   const startExamAttempt = (examId: string): StudentExamAttempt => {
@@ -968,6 +1376,22 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
       prev.map(a => (a.id === attemptId ? updatedAttempt : a))
     );
 
+    fetch('/api/exams/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        examId: exam.id,
+        studentId: currentUser.id,
+        studentName: currentUser.name,
+        answers,
+        totalScore,
+        maxScore,
+        scorePercent,
+        passed,
+        isUnlocked
+      })
+    }).catch(err => console.error('Failed to submit exam attempt to VPS:', err));
+
     logAudit(
       'EXAM_SUBMITTED',
       `Student ${currentUser.name} submitted exam ${exam.title} (${scorePercent}% - Result Unlocked: ${isUnlocked ? 'Yes' : 'Hidden until time ends'})`
@@ -1008,6 +1432,12 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
     setCourses(prev =>
       prev.map(c => (c.id === courseId ? { ...c, status, rejectionReason } : c))
     );
+
+    fetch('/api/admin/courses', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ courseId, status, rejectionReason })
+    }).catch(err => console.error('Failed to update course status on VPS:', err));
   };
 
   const saveCourse = (courseData: Partial<Course> & { id?: string }) => {
@@ -1035,17 +1465,30 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
     setPayoutRequests(prev =>
       prev.map(p => (p.id === payoutId ? { ...p, status: 'PAID' } : p))
     );
+
+    fetch('/api/instructor/payouts', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: payoutId, status: 'PAID' })
+    }).catch(err => console.error('Failed to approve payout on VPS:', err));
   };
 
   const rejectPayout = (payoutId: string) => {
     setPayoutRequests(prev =>
       prev.map(p => (p.id === payoutId ? { ...p, status: 'REJECTED' } : p))
     );
+
+    fetch('/api/instructor/payouts', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: payoutId, status: 'REJECTED' })
+    }).catch(err => console.error('Failed to reject payout on VPS:', err));
   };
 
   const requestInstructorPayout = (amount: number, method: string, account: string) => {
+    const tempId = `pay_${Date.now()}`;
     const newPayout: PayoutRequest = {
-      id: `pay_${Date.now()}`,
+      id: tempId,
       instructorId: currentUser.id,
       instructorName: currentUser.name,
       instructorAvatar: currentUser.avatar,
@@ -1056,10 +1499,32 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
       accountDetails: account
     };
     setPayoutRequests(prev => [newPayout, ...prev]);
+
+    fetch('/api/instructor/payouts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        instructorId: currentUser.id,
+        amount,
+        method,
+        account
+      })
+    }).then(r => r.json()).then(data => {
+      if (data.success && data.payout) {
+        setPayoutRequests(prev => prev.map(p => p.id === tempId ? data.payout : p));
+      }
+    }).catch(err => console.error('Failed to persist payout request on VPS:', err));
   };
 
   const updatePlatformConfig = (newConfig: Partial<PlatformConfig>) => {
-    setPlatformConfig(prev => ({ ...prev, ...newConfig }));
+    const updated = { ...platformConfig, ...newConfig };
+    setPlatformConfig(updated);
+
+    fetch('/api/admin/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updated)
+    }).catch(err => console.error('Failed to persist platform settings to VPS:', err));
   };
 
   const replyToReview = () => {};
@@ -1068,10 +1533,16 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
     <LMSContext.Provider
       value={{
         currentUser,
+        isHydrated,
+        isLiveDbReady,
         impersonatedByAdmin,
         switchRole,
         impersonateUser,
         stopImpersonating,
+        loginUser,
+        logout,
+        isLoadingLiveDb,
+        refreshLMSData,
         studentGradeId,
         setStudentGradeId,
         activeGradeDetails,
@@ -1090,6 +1561,7 @@ export function LMSProvider({ children }: { children: React.ReactNode }) {
         getSubscription,
         subscribeWithPayment,
         redeemVoucher,
+        adminActivateSubscription,
         generateVouchers,
         createInstructor,
         updateInstructorSubscription,

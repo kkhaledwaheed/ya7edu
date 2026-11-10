@@ -132,19 +132,19 @@ export default function AdminYa7eduBookletsPage() {
             <Sparkles className="w-3.5 h-3.5" />
             <span>لوحة تحكم الإدارة &bull; الإصدارات الرسمية والمذكرات الحصرية</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             إدارة وإصدار مذكرات YA7EDU الحصرية VIP
           </h1>
-          <p className="text-sm text-gray-400 mt-1">
+          <p className="text-sm text-slate-500 mt-1">
             رفع ملفات المذكرات الحصرية برعاية المنصة وتحديد المادة والمعلم المخصص، ليتمكن الطلاب المشتركون فقط من تحميلها وتصفحها.
           </p>
         </div>
 
         <a
           href="/student/player"
-          className="px-4 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 text-xs font-bold flex items-center gap-2 transition shrink-0"
+          className="px-4 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-slate-800 text-xs font-bold flex items-center gap-2 transition shrink-0"
         >
-          <Eye className="w-4 h-4 text-cyan-400" />
+          <Eye className="w-4 h-4 text-blue-600" />
           <span>معاينة في مشغل الطالب</span>
         </a>
       </div>
@@ -157,37 +157,37 @@ export default function AdminYa7eduBookletsPage() {
       )}
 
       {/* Form Card: Create Exclusive Booklet */}
-      <div className="p-6 rounded-3xl glass-card border border-amber-500/30 shadow-xl space-y-5">
-        <div className="flex items-center gap-2.5 pb-2 border-b border-gray-800">
+      <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm border border-amber-500/30 shadow-xl space-y-5">
+        <div className="flex items-center gap-2.5 pb-2 border-b border-slate-200">
           <div className="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
             <FileUp className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-white">إصدار ونشر مذكرة حصرية جديدة (Exclusive PDF)</h3>
-            <span className="text-[11px] text-gray-400">خاصة بالإدارة المركزية لمنصة YA7EDU</span>
+            <h3 className="text-base font-bold text-slate-900">إصدار ونشر مذكرة حصرية جديدة (Exclusive PDF)</h3>
+            <span className="text-[11px] text-slate-500">خاصة بالإدارة المركزية لمنصة YA7EDU</span>
           </div>
         </div>
 
         <form onSubmit={handleCreateBooklet} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
             <div className="sm:col-span-2">
-              <label className="text-gray-300 font-semibold block mb-1">اسم المذكرة الحصرية بالعربية *</label>
+              <label className="text-slate-700 font-semibold block mb-1">اسم المذكرة الحصرية بالعربية *</label>
               <input
                 type="text"
                 required
                 value={titleAr}
                 onChange={e => setTitleAr(e.target.value)}
                 placeholder="مثال: كتيب YA7EDU الحصري: كبسولة مراجعة ليلة الامتحان ونقاط التريكات"
-                className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-amber-500"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:border-amber-500"
               />
             </div>
 
             <div>
-              <label className="text-gray-300 font-semibold block mb-1">المادة والمعلم المستهدف *</label>
+              <label className="text-slate-700 font-semibold block mb-1">المادة والمعلم المستهدف *</label>
               <select
                 value={targetContentId}
                 onChange={e => setTargetContentId(e.target.value)}
-                className="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2.5 text-white font-semibold focus:outline-none focus:border-amber-500"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-900 font-semibold focus:outline-none focus:border-amber-500"
               >
                 {instructorContents.map(c => (
                   <option key={c.id} value={c.id}>
@@ -200,30 +200,30 @@ export default function AdminYa7eduBookletsPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div>
-              <label className="text-gray-300 font-semibold block mb-1">الاسم بالإنجليزية (اختياري)</label>
+              <label className="text-slate-700 font-semibold block mb-1">الاسم بالإنجليزية (اختياري)</label>
               <input
                 type="text"
                 value={titleEn}
                 onChange={e => setTitleEn(e.target.value)}
                 placeholder="YA7EDU Physics VIP Capsule Booklet"
-                className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-amber-500"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:border-amber-500"
               />
             </div>
 
             <div>
-              <label className="text-gray-300 font-semibold block mb-1">عدد الصفحات التقديري</label>
+              <label className="text-slate-700 font-semibold block mb-1">عدد الصفحات التقديري</label>
               <input
                 type="number"
                 value={pages}
                 onChange={e => setPages(parseInt(e.target.value) || 0)}
-                className="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-white font-mono focus:outline-none focus:border-amber-500"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 font-mono focus:outline-none focus:border-amber-500"
               />
             </div>
           </div>
 
           {/* مساحة رفع ملف الـ PDF الحقيقي */}
-          <div className="space-y-3 pt-2 border-t border-gray-800">
-            <label className="text-gray-300 font-semibold text-xs flex items-center justify-between">
+          <div className="space-y-3 pt-2 border-t border-slate-200">
+            <label className="text-slate-700 font-semibold text-xs flex items-center justify-between">
               <span className="flex items-center gap-1.5">
                 <FileUp className="w-4 h-4 text-amber-400" />
                 <span>رفع ملف المذكرة (PDF File) *</span>
@@ -242,20 +242,20 @@ export default function AdminYa7eduBookletsPage() {
             {!uploadedFileName ? (
               <div
                 onClick={() => fileInputRef.current?.click()}
-                className="p-8 rounded-2xl border-2 border-dashed border-gray-800 hover:border-amber-500/70 bg-gray-950/40 hover:bg-gray-950/80 cursor-pointer transition text-center space-y-2 group"
+                className="p-8 rounded-2xl border-2 border-dashed border-slate-200 hover:border-amber-500/70 bg-slate-50/40 hover:bg-slate-50/80 cursor-pointer transition text-center space-y-2 group"
               >
                 <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 group-hover:scale-110 flex items-center justify-center mx-auto transition">
                   <UploadCloud className="w-6 h-6" />
                 </div>
-                <div className="text-xs font-bold text-white">
+                <div className="text-xs font-bold text-slate-900">
                   اضغط لاختيار ملف المذكرة (PDF) من جهاز الكمبيوتر أو اسحبه وأفلته هنا
                 </div>
-                <p className="text-[11px] text-gray-400">
+                <p className="text-[11px] text-slate-500">
                   يدعم صيغة PDF حتى 50 ميجابايت كحد أقصى
                 </p>
               </div>
             ) : (
-              <div className="p-4 rounded-2xl bg-gray-900 border border-amber-500/40 space-y-3">
+              <div className="p-4 rounded-2xl bg-white border border-amber-500/40 space-y-3">
                 <div className="flex items-center justify-between text-xs">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
@@ -263,7 +263,7 @@ export default function AdminYa7eduBookletsPage() {
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-white">{uploadedFileName}</span>
+                        <span className="font-bold text-slate-900">{uploadedFileName}</span>
                         <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono">
                           {uploadedFileSize}
                         </span>
@@ -283,7 +283,7 @@ export default function AdminYa7eduBookletsPage() {
                       setUploadedFileUrl(null);
                       if (fileInputRef.current) fileInputRef.current.value = '';
                     }}
-                    className="text-[11px] text-rose-400 hover:underline px-2.5 py-1 rounded-lg hover:bg-rose-500/10 transition"
+                    className="text-[11px] text-blue-600 hover:underline px-2.5 py-1 rounded-lg hover:bg-rose-500/10 transition"
                   >
                     تغيير الملف
                   </button>
@@ -291,7 +291,7 @@ export default function AdminYa7eduBookletsPage() {
 
                 {isUploading && (
                   <div className="space-y-1">
-                    <div className="flex justify-between text-[10px] text-gray-400">
+                    <div className="flex justify-between text-[10px] text-slate-500">
                       <span>جاري معالجة ورفع الملف...</span>
                       <span className="font-mono">{uploadProgress}%</span>
                     </div>
@@ -310,7 +310,7 @@ export default function AdminYa7eduBookletsPage() {
           <div className="flex justify-end pt-2">
             <button
               type="submit"
-              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 text-white font-extrabold text-xs shadow-lg shadow-amber-600/30 transition flex items-center gap-2"
+              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 text-slate-900 font-extrabold text-xs shadow-lg shadow-amber-600/30 transition flex items-center gap-2"
             >
               <Sparkles className="w-4 h-4" />
               <span>إصدار ونشر المذكرة الحصرية في المنصة</span>
@@ -323,25 +323,25 @@ export default function AdminYa7eduBookletsPage() {
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="relative flex-1 max-w-md">
-            <Search className="w-4 h-4 text-gray-400 absolute right-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-slate-500 absolute right-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="ابحث باسم المذكرة أو المادة أو المعلم..."
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
-              className="w-full pl-4 pr-10 py-2.5 rounded-2xl bg-gray-900 border border-gray-800 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
+              className="w-full pl-4 pr-10 py-2.5 rounded-2xl bg-white border border-slate-200 text-xs text-slate-900 placeholder-gray-500 focus:outline-none focus:border-amber-500"
             />
           </div>
 
-          <span className="text-xs text-gray-400">
+          <span className="text-xs text-slate-500">
             إجمالي المذكرات الحصرية المنشورة: {allExclusiveBooklets.length}
           </span>
         </div>
 
-        <div className="rounded-3xl glass-card border border-gray-800 overflow-hidden shadow-xl">
+        <div className="rounded-3xl bg-white border border-slate-200 shadow-sm overflow-hidden shadow-xl">
           <div className="overflow-x-auto">
             <table className="w-full text-right text-xs">
-              <thead className="bg-gray-900/80 border-b border-gray-800 text-gray-400 font-bold uppercase tracking-wider text-[11px]">
+              <thead className="bg-white/80 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px]">
                 <tr>
                   <th className="py-4 px-6">عنوان المذكرة الحصرية</th>
                   <th className="py-4 px-6">المادة والمعلم المخصص</th>
@@ -354,42 +354,42 @@ export default function AdminYa7eduBookletsPage() {
               <tbody className="divide-y divide-gray-800/60">
                 {filteredBooklets.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="py-8 text-center text-gray-400 text-xs">
+                    <td colSpan={6} className="py-8 text-center text-slate-500 text-xs">
                       لا توجد مذكرات حصرية مطابقة. استخدم النموذج أعلاه لرفع مذكرة حصرية جديدة.
                     </td>
                   </tr>
                 ) : (
                   filteredBooklets.map(bkt => (
-                    <tr key={bkt.id} className="hover:bg-gray-800/40 transition">
+                    <tr key={bkt.id} className="hover:bg-slate-50 transition">
                       <td className="py-4 px-6">
                         <div className="flex items-center gap-3">
                           <div className="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold shrink-0">
                             <Sparkles className="w-4 h-4" />
                           </div>
                           <div>
-                            <div className="font-bold text-white text-sm">{bkt.titleAr}</div>
-                            <div className="text-[11px] text-gray-400">{bkt.titleEn}</div>
+                            <div className="font-bold text-slate-900 text-sm">{bkt.titleAr}</div>
+                            <div className="text-[11px] text-slate-500">{bkt.titleEn}</div>
                           </div>
                         </div>
                       </td>
 
                       <td className="py-4 px-6">
                         <div>
-                          <span className="px-2 py-0.5 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 font-semibold text-[10px]">
+                          <span className="px-2 py-0.5 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-blue-700 font-semibold text-[10px]">
                             {bkt.subjectName}
                           </span>
-                          <span className="text-gray-400 block text-[11px] mt-0.5">
+                          <span className="text-slate-500 block text-[11px] mt-0.5">
                             {bkt.instructorName}
                           </span>
                         </div>
                       </td>
 
-                      <td className="py-4 px-6 font-mono text-gray-300">
+                      <td className="py-4 px-6 font-mono text-slate-700">
                         <div>{bkt.pageCount} صفحة</div>
                         <div className="text-[10px] text-amber-400 font-bold">{bkt.fileSize || 'PDF'}</div>
                       </td>
 
-                      <td className="py-4 px-6 font-mono text-gray-400 text-[11px]">
+                      <td className="py-4 px-6 font-mono text-slate-500 text-[11px]">
                         {bkt.uploadDate}
                       </td>
 
@@ -406,7 +406,7 @@ export default function AdminYa7eduBookletsPage() {
                             <a
                               href={bkt.downloadUrl}
                               download={`${bkt.titleAr}.pdf`}
-                              className="p-1.5 rounded-lg text-cyan-400 hover:bg-cyan-500/20 transition"
+                              className="p-1.5 rounded-lg text-blue-600 hover:bg-cyan-500/20 transition"
                               title="تحميل الملف"
                             >
                               <Download className="w-4 h-4" />
@@ -415,7 +415,7 @@ export default function AdminYa7eduBookletsPage() {
 
                           <button
                             onClick={() => handleDelete(bkt.contentId, bkt.id, bkt.titleAr)}
-                            className="p-1.5 rounded-lg text-rose-400 hover:bg-rose-500/20 transition"
+                            className="p-1.5 rounded-lg text-blue-600 hover:bg-rose-500/20 transition"
                             title="حذف المذكرة الحصرية"
                           >
                             <Trash2 className="w-4 h-4" />

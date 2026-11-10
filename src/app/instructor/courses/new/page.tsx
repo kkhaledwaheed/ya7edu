@@ -156,21 +156,21 @@ function CourseStudioContent() {
   };
 
   return (
-    <div className="space-y-8 font-sans max-w-5xl mx-auto text-right">
+    <div className="space-y-8 font-sans max-w-5xl mx-auto text-right pb-16">
       {/* الترويسة */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <button
             onClick={() => router.push('/instructor/courses')}
-            className="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-white mb-2 transition"
+            className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-blue-600 mb-2 transition"
           >
             <ArrowRight className="w-4 h-4" />
             <span>العودة لقائمة المناهج</span>
           </button>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             {existingCourse ? 'تعديل وتحديث المنهج' : 'إعداد ورفع منهج دراسي جديد'}
           </h1>
-          <p className="text-sm text-gray-400 mt-1">
+          <p className="text-sm text-slate-500 mt-1">
             صمم هيكل الأبواب والمحاضرات، ارفع مذكرات الشرح والواجبات، وأرسل المنهج للاعتماد والنشر.
           </p>
         </div>
@@ -178,14 +178,14 @@ function CourseStudioContent() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => handleSave(false)}
-            className="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 text-xs font-semibold flex items-center gap-2 transition"
+            className="px-4 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold flex items-center gap-2 transition border border-slate-200 shadow-sm"
           >
             <Save className="w-4 h-4" />
             <span>حفظ كمسودة</span>
           </button>
           <button
             onClick={() => handleSave(true)}
-            className="px-5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-cyan-600/30 transition"
+            className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-2 shadow-md shadow-blue-500/20 transition"
           >
             <Send className="w-4 h-4 rotate-180" />
             <span>إرسال للاعتماد والنشر</span>
@@ -194,14 +194,14 @@ function CourseStudioContent() {
       </div>
 
       {notification && (
-        <div className="p-4 rounded-2xl bg-emerald-500/15 border border-emerald-500/40 text-xs font-semibold text-emerald-300 flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 shrink-0" />
+        <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs font-semibold text-emerald-700 flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
           <span>{notification}</span>
         </div>
       )}
 
       {/* مؤشر الخطوات */}
-      <div className="grid grid-cols-4 gap-2 border-b border-gray-800 pb-4">
+      <div className="grid grid-cols-4 gap-2 border-b border-slate-200 pb-4">
         {[
           { id: 1, label: 'البيانات الأساسية' },
           { id: 2, label: 'الأبواب والمحاضرات' },
@@ -211,13 +211,15 @@ function CourseStudioContent() {
           <button
             key={s.id}
             onClick={() => setStep(s.id as any)}
-            className={`text-center py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 ${
+            className={`text-center py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 ${
               step === s.id
-                ? 'bg-cyan-600/20 text-cyan-300 border border-cyan-500/40'
-                : 'text-gray-400 hover:text-white'
+                ? 'bg-blue-50 text-blue-700 border border-blue-200 shadow-sm'
+                : 'text-slate-500 hover:text-slate-900'
             }`}
           >
-            <span className="w-5 h-5 rounded-full bg-gray-800 flex items-center justify-center text-[10px]">
+            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
+              step === s.id ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'
+            }`}>
               {s.id}
             </span>
             <span className="hidden sm:inline">{s.label}</span>
@@ -227,42 +229,42 @@ function CourseStudioContent() {
 
       {/* الخطوة 1: البيانات الأساسية */}
       {step === 1 && (
-        <div className="p-6 sm:p-8 rounded-3xl glass-card border border-gray-800 space-y-5">
-          <h2 className="text-base font-bold text-white flex items-center gap-2">
-            <BookOpen className="w-4 h-4 text-cyan-400" />
+        <div className="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 space-y-5 shadow-sm">
+          <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+            <BookOpen className="w-4 h-4 text-blue-600" />
             <span>المعلومات العامة للمنهج</span>
           </h2>
 
           <div className="space-y-4 text-xs">
             <div>
-              <label className="text-gray-300 font-semibold block mb-1">اسم المنهج الدراسي</label>
+              <label className="text-slate-700 font-semibold block mb-1">اسم المنهج الدراسي</label>
               <input
                 type="text"
                 value={title}
                 onChange={e => setTitle(e.target.value)}
                 placeholder="مثال: منهج الفيزياء للثانوية العامة 2026 - الكهربية والمغناطيسية"
-                className="w-full bg-gray-900 border border-gray-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-400"
+                className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
             </div>
 
             <div>
-              <label className="text-gray-300 font-semibold block mb-1">الوصف المختصر</label>
+              <label className="text-slate-700 font-semibold block mb-1">الوصف المختصر</label>
               <input
                 type="text"
                 value={subtitle}
                 onChange={e => setSubtitle(e.target.value)}
                 placeholder="مثال: كورس شامل يغطي منهج الفيزياء كاملاً مع حل بنك أسئلة الوزارة"
-                className="w-full bg-gray-900 border border-gray-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-400"
+                className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-gray-300 font-semibold block mb-1">المادة الدراسية</label>
+                <label className="text-slate-700 font-semibold block mb-1">المادة الدراسية</label>
                 <select
                   value={category}
                   onChange={e => setCategory(e.target.value)}
-                  className="w-full bg-gray-900 border border-gray-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-400"
+                  className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 >
                   <option value="الفيزياء">الفيزياء (Physics)</option>
                   <option value="الرياضيات">الرياضيات (Mathematics)</option>
@@ -274,11 +276,11 @@ function CourseStudioContent() {
               </div>
 
               <div>
-                <label className="text-gray-300 font-semibold block mb-1">المرحلة الدراسية</label>
+                <label className="text-slate-700 font-semibold block mb-1">المرحلة الدراسية</label>
                 <select
                   value={level}
                   onChange={e => setLevel(e.target.value as any)}
-                  className="w-full bg-gray-900 border border-gray-800 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-400"
+                  className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 >
                   <option value="ALL_LEVELS">الصف الثالث الثانوي (الثانوية العامة)</option>
                   <option value="INTERMEDIATE">الصف الثاني الثانوي</option>
@@ -288,13 +290,13 @@ function CourseStudioContent() {
             </div>
 
             <div>
-              <label className="text-gray-300 font-semibold block mb-1">وصف المنهج وأهداف التعلم</label>
+              <label className="text-slate-700 font-semibold block mb-1">وصف المنهج وأهداف التعلم</label>
               <textarea
                 rows={4}
                 value={description}
                 onChange={e => setDescription(e.target.value)}
                 placeholder="اشرح للطلاب محتويات المنهج وما سيتم تغطيته في الأبواب المختلفة..."
-                className="w-full bg-gray-900 border border-gray-800 rounded-xl p-4 text-white focus:outline-none focus:border-cyan-400"
+                className="w-full bg-white border border-slate-300 rounded-xl p-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
             </div>
 
@@ -302,7 +304,7 @@ function CourseStudioContent() {
               <button
                 type="button"
                 onClick={() => setStep(2)}
-                className="px-6 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs"
+                className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm"
               >
                 التالي: إضافة الأبواب والحصص
               </button>
@@ -315,15 +317,15 @@ function CourseStudioContent() {
       {step === 2 && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-base font-bold text-white flex items-center gap-2">
-              <Layers className="w-4 h-4 text-cyan-400" />
+            <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <Layers className="w-4 h-4 text-blue-600" />
               <span>هيكل الأبواب والمحاضرات ({sections.length} أبواب)</span>
             </h2>
 
             <button
               type="button"
               onClick={handleAddSection}
-              className="px-4 py-2 rounded-xl bg-cyan-600/20 text-cyan-300 border border-cyan-500/40 text-xs font-bold flex items-center gap-1.5 hover:bg-cyan-600/30 transition"
+              className="px-4 py-2 rounded-xl bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold flex items-center gap-1.5 hover:bg-blue-100 transition shadow-sm"
             >
               <Plus className="w-4 h-4" />
               <span>إضافة باب دراسي جديد</span>
@@ -332,24 +334,24 @@ function CourseStudioContent() {
 
           <div className="space-y-4">
             {sections.map((sec, sIdx) => (
-              <div key={sec.id} className="p-5 rounded-3xl glass-card border border-gray-800 space-y-4">
+              <div key={sec.id} className="p-5 rounded-3xl bg-white border border-slate-200 space-y-4 shadow-sm">
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3 flex-1">
-                    <span className="w-7 h-7 rounded-lg bg-gray-800 flex items-center justify-center font-bold text-xs text-cyan-400 shrink-0">
+                    <span className="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center font-bold text-xs text-blue-600 shrink-0">
                       {sIdx + 1}
                     </span>
                     <input
                       type="text"
                       value={sec.title}
                       onChange={e => handleSectionTitleChange(sec.id, e.target.value)}
-                      className="flex-1 bg-gray-900/80 border border-gray-800 rounded-xl px-3 py-1.5 text-xs text-white font-bold focus:outline-none focus:border-cyan-400"
+                      className="flex-1 bg-white border border-slate-300 rounded-xl px-3 py-1.5 text-xs text-slate-900 font-bold focus:outline-none focus:border-blue-500"
                     />
                   </div>
 
                   <button
                     type="button"
                     onClick={() => handleDeleteSection(sec.id)}
-                    className="p-1.5 rounded-lg text-gray-500 hover:text-rose-400 hover:bg-rose-950/30 transition"
+                    className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition"
                     title="حذف الباب"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -357,22 +359,22 @@ function CourseStudioContent() {
                 </div>
 
                 {/* الحصص التابعة */}
-                <div className="mr-8 space-y-2 border-r-2 border-gray-800 pr-4">
-                  {sec.lessons.map((les, lIdx) => (
+                <div className="mr-8 space-y-2 border-r-2 border-slate-200 pr-4">
+                  {sec.lessons.map((les) => (
                     <div
                       key={les.id}
-                      className="p-3 rounded-xl bg-gray-900/60 border border-gray-800/80 flex items-center justify-between text-xs"
+                      className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs"
                     >
                       <div className="flex items-center gap-2">
-                        <Video className="w-4 h-4 text-cyan-400" />
-                        <span className="text-white font-medium">{les.title}</span>
-                        <span className="text-gray-500">({les.durationMinutes} دقيقة)</span>
+                        <Video className="w-4 h-4 text-blue-600" />
+                        <span className="text-slate-900 font-medium">{les.title}</span>
+                        <span className="text-slate-500">({les.durationMinutes} دقيقة)</span>
                       </div>
 
                       <button
                         type="button"
                         onClick={() => handleDeleteLesson(sec.id, les.id)}
-                        className="text-gray-500 hover:text-rose-400"
+                        className="text-slate-400 hover:text-rose-600"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -382,7 +384,7 @@ function CourseStudioContent() {
                   <button
                     type="button"
                     onClick={() => handleAddLesson(sec.id)}
-                    className="w-full py-2 rounded-xl border border-dashed border-gray-700 hover:border-cyan-500/50 text-gray-400 hover:text-cyan-300 text-xs font-semibold flex items-center justify-center gap-1.5 transition"
+                    className="w-full py-2 rounded-xl border border-dashed border-slate-300 hover:border-blue-400 text-slate-500 hover:text-blue-600 text-xs font-semibold flex items-center justify-center gap-1.5 transition bg-white"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     <span>إضافة محاضرة فيديو داخل هذا الباب</span>
@@ -396,14 +398,14 @@ function CourseStudioContent() {
             <button
               type="button"
               onClick={() => setStep(1)}
-              className="px-5 py-2.5 rounded-xl bg-gray-800 text-gray-300 font-semibold text-xs"
+              className="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition"
             >
               السابق
             </button>
             <button
               type="button"
               onClick={() => setStep(3)}
-              className="px-6 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs"
+              className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm"
             >
               التالي: تحديد رسوم الاشتراك
             </button>
@@ -413,15 +415,15 @@ function CourseStudioContent() {
 
       {/* الخطوة 3: التسعير والاشتراك */}
       {step === 3 && (
-        <div className="p-6 sm:p-8 rounded-3xl glass-card border border-gray-800 space-y-5">
-          <h2 className="text-base font-bold text-white flex items-center gap-2">
-            <DollarSign className="w-4 h-4 text-cyan-400" />
+        <div className="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 space-y-5 shadow-sm">
+          <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+            <DollarSign className="w-4 h-4 text-blue-600" />
             <span>رسوم الاشتراك الشهري وكروت الشحن</span>
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div>
-              <label className="text-gray-300 font-semibold block mb-1">
+              <label className="text-slate-700 font-semibold block mb-1">
                 سعر الاشتراك الشهري الأساسي (ج.م)
               </label>
               <input
@@ -430,15 +432,15 @@ function CourseStudioContent() {
                 step="25"
                 value={price}
                 onChange={e => setPrice(parseFloat(e.target.value) || 0)}
-                className="w-full bg-gray-900 border border-gray-800 rounded-xl px-4 py-2.5 text-white font-mono text-sm focus:outline-none focus:border-cyan-400"
+                className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 font-mono text-sm focus:outline-none focus:border-blue-500"
               />
-              <span className="text-[11px] text-gray-500 mt-1 block">
+              <span className="text-[11px] text-slate-500 mt-1 block">
                 السعر المعلن للاشتراك المباشر بالفيزا أو المحافظ الإلكترونية.
               </span>
             </div>
 
             <div>
-              <label className="text-gray-300 font-semibold block mb-1">
+              <label className="text-slate-700 font-semibold block mb-1">
                 سعر كارت الشحن الورقي للسناتر (ج.م)
               </label>
               <input
@@ -447,9 +449,9 @@ function CourseStudioContent() {
                 step="25"
                 value={discountPrice || price}
                 onChange={e => setDiscountPrice(parseFloat(e.target.value) || 0)}
-                className="w-full bg-gray-900 border border-gray-800 rounded-xl px-4 py-2.5 text-white font-mono text-sm focus:outline-none focus:border-cyan-400"
+                className="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 font-mono text-sm focus:outline-none focus:border-blue-500"
               />
-              <span className="text-[11px] text-gray-500 mt-1 block">
+              <span className="text-[11px] text-slate-500 mt-1 block">
                 القيمة التي يتم طباعتها على كارت الخدش للطلاب في السناتر.
               </span>
             </div>
@@ -459,14 +461,14 @@ function CourseStudioContent() {
             <button
               type="button"
               onClick={() => setStep(2)}
-              className="px-5 py-2.5 rounded-xl bg-gray-800 text-gray-300 font-semibold text-xs"
+              className="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition"
             >
               السابق
             </button>
             <button
               type="button"
               onClick={() => setStep(4)}
-              className="px-6 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs"
+              className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm"
             >
               التالي: مراجعة المنهج والإرسال
             </button>
@@ -476,39 +478,39 @@ function CourseStudioContent() {
 
       {/* الخطوة 4: المراجعة والإرسال */}
       {step === 4 && (
-        <div className="p-6 sm:p-8 rounded-3xl glass-card border border-cyan-500/30 space-y-6">
+        <div className="p-6 sm:p-8 rounded-3xl bg-white border border-blue-200 space-y-6 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
               <Sparkles className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">المراجعة النهائية قبل النشر</h2>
-              <p className="text-xs text-gray-400">تحقق من اكتمال كافة الفصول والمذكرات قبل إرسال المنهج للرقابة</p>
+              <h2 className="text-lg font-bold text-slate-900">المراجعة النهائية قبل النشر</h2>
+              <p className="text-xs text-slate-500">تحقق من اكتمال كافة الفصول والمذكرات قبل إرسال المنهج للرقابة</p>
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-gray-900/60 border border-gray-800 text-xs space-y-2">
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-2">
             <div className="flex justify-between">
-              <span className="text-gray-400">اسم المنهج:</span>
-              <span className="font-bold text-white">{title || 'لم يُحدد'}</span>
+              <span className="text-slate-500">اسم المنهج:</span>
+              <span className="font-bold text-slate-900">{title || 'لم يُحدد'}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-400">المادة:</span>
-              <span className="font-bold text-cyan-300">{category}</span>
+              <span className="text-slate-500">المادة:</span>
+              <span className="font-bold text-blue-600">{category}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-400">عدد الأبواب:</span>
-              <span className="font-bold text-white">{sections.length} أبواب</span>
+              <span className="text-slate-500">عدد الأبواب:</span>
+              <span className="font-bold text-slate-900">{sections.length} أبواب</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-400">إجمالي المحاضرات:</span>
-              <span className="font-bold text-white">
+              <span className="text-slate-500">إجمالي المحاضرات:</span>
+              <span className="font-bold text-slate-900">
                 {sections.reduce((acc, s) => acc + s.lessons.length, 0)} محاضرة
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-400">سعر الاشتراك الشهري:</span>
-              <span className="font-bold text-emerald-400 font-mono">{price} ج.م</span>
+              <span className="text-slate-500">سعر الاشتراك الشهري:</span>
+              <span className="font-bold text-emerald-600 font-mono">{price} ج.م</span>
             </div>
           </div>
 
@@ -516,14 +518,14 @@ function CourseStudioContent() {
             <button
               type="button"
               onClick={() => setStep(3)}
-              className="px-5 py-2.5 rounded-xl bg-gray-800 text-gray-300 font-semibold text-xs"
+              className="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition"
             >
               السابق
             </button>
             <button
               type="button"
               onClick={() => handleSave(true)}
-              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white font-bold text-xs shadow-lg shadow-cyan-600/30 flex items-center gap-2"
+              className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-500/20 flex items-center gap-2"
             >
               <Send className="w-4 h-4 rotate-180" />
               <span>تأكيد الإرسال للاعتماد الأكاديمي</span>
@@ -537,7 +539,7 @@ function CourseStudioContent() {
 
 export default function CourseStudioPage() {
   return (
-    <Suspense fallback={<div className="p-8 text-center text-gray-400">جاري تحميل استوديو المناهج...</div>}>
+    <Suspense fallback={<div className="p-8 text-center text-slate-500 font-medium">جاري تحميل استوديو المناهج...</div>}>
       <CourseStudioContent />
     </Suspense>
   );

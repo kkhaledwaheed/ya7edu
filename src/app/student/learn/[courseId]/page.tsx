@@ -23,6 +23,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { SecureLmsPlayer } from '@/components/player/secure-lms-player';
 
 export default function CoursePlayerPage({ params }: { params: Promise<{ courseId: string }> }) {
   const { courseId } = use(params);
@@ -222,12 +223,16 @@ export default function CoursePlayerPage({ params }: { params: Promise<{ courseI
           {/* مشغل الفيديو */}
           <div className="bg-black relative group flex flex-col justify-center items-center aspect-video max-h-[65vh] w-full">
             {activeLesson?.videoUrl ? (
-              <video
-                ref={videoRef}
-                src={activeLesson.videoUrl}
-                controls
-                className="w-full h-full object-contain"
+              <SecureLmsPlayer
+                videoUrl={activeLesson.videoUrl}
+                title={activeLesson.title}
                 poster={course.thumbnail}
+                studentName={currentUser?.name || 'طالب الأكاديمية'}
+                studentPhone={currentUser?.phone || '01030370718'}
+                studentId={currentUser?.id}
+                isTheater={isTheaterMode}
+                onToggleTheater={() => setIsTheaterMode(!isTheaterMode)}
+                className="w-full h-full"
               />
             ) : (
               <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-indigo-950/40 to-slate-900 p-8 text-center">

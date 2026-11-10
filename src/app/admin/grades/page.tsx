@@ -272,14 +272,14 @@ export default function AdminGradesPage() {
       {/* رأس الصفحة والإحصائيات */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs font-semibold mb-2">
-            <Layers className="w-3.5 h-3.5 text-rose-400" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold mb-2">
+            <Layers className="w-3.5 h-3.5 text-blue-600" />
             <span>بوابة الإدارة والحوكمة &bull; الهيكل التعليمي</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             إدارة الصفوف والمراحل والمواد الدراسية
           </h1>
-          <p className="text-sm text-gray-400 mt-1 max-w-2xl">
+          <p className="text-sm text-slate-500 mt-1 max-w-2xl">
             أضف الصفوف الدراسية والمراحل التعليمية بحرية كاملة، وحدد وخصص المواد التابعة لكل صف، مع انعكاس فوري على بوابات المعلمين والطلاب وتوليد الكروت.
           </p>
         </div>
@@ -287,7 +287,7 @@ export default function AdminGradesPage() {
         <div className="flex items-center gap-2.5 shrink-0">
           <button
             onClick={() => handleOpenAddSubject(selectedGradeId)}
-            className="px-4 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-cyan-300 border border-cyan-500/30 font-bold text-xs flex items-center gap-2 transition"
+            className="px-4 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-blue-700 border border-cyan-500/30 font-bold text-xs flex items-center gap-2 transition"
           >
             <Plus className="w-4 h-4" />
             <span>إضافة مادة دراسية</span>
@@ -295,7 +295,7 @@ export default function AdminGradesPage() {
 
           <button
             onClick={handleOpenAddGrade}
-            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-indigo-600 hover:from-rose-500 text-white font-extrabold text-xs flex items-center gap-2 shadow-lg shadow-rose-600/30 transition"
+            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-indigo-600 hover:from-rose-500 text-slate-900 font-extrabold text-xs flex items-center gap-2 shadow-lg shadow-rose-600/30 transition"
           >
             <Plus className="w-4 h-4" />
             <span>إضافة صف دراسي جديد</span>
@@ -305,43 +305,43 @@ export default function AdminGradesPage() {
 
       {/* شريط الإحصائيات السريعة */}
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-        <div className="p-4 rounded-2xl glass-card border border-rose-500/30 flex items-center gap-3.5">
-          <div className="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center shrink-0">
+        <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm border border-rose-500/30 flex items-center gap-3.5">
+          <div className="w-10 h-10 rounded-xl bg-rose-500/20 text-blue-600 flex items-center justify-center shrink-0">
             <Layers className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xl font-bold font-mono text-white">{academicGrades.length} صفوف</div>
-            <div className="text-xs text-gray-400">إجمالي الصفوف المفعلة</div>
+            <div className="text-xl font-bold font-mono text-slate-900">{academicGrades.length} صفوف</div>
+            <div className="text-xs text-slate-500">إجمالي الصفوف المفعلة</div>
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl glass-card border border-cyan-500/30 flex items-center gap-3.5">
-          <div className="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0">
+        <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm border border-cyan-500/30 flex items-center gap-3.5">
+          <div className="w-10 h-10 rounded-xl bg-cyan-500/20 text-blue-600 flex items-center justify-center shrink-0">
             <BookOpen className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xl font-bold font-mono text-white">{allSubjects.length} مادة</div>
-            <div className="text-xs text-gray-400">إجمالي المقررات بالمنصة</div>
+            <div className="text-xl font-bold font-mono text-slate-900">{allSubjects.length} مادة</div>
+            <div className="text-xs text-slate-500">إجمالي المقررات بالمنصة</div>
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl glass-card border border-emerald-500/30 flex items-center gap-3.5">
+        <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm border border-emerald-500/30 flex items-center gap-3.5">
           <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
             <GraduationCap className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xl font-bold font-mono text-white">{instructorUsers.length} معلم</div>
-            <div className="text-xs text-gray-400">معلمون مسندون للصفوف</div>
+            <div className="text-xl font-bold font-mono text-slate-900">{instructorUsers.length} معلم</div>
+            <div className="text-xs text-slate-500">معلمون مسندون للصفوف</div>
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl glass-card border border-amber-500/30 flex items-center gap-3.5">
+        <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm border border-amber-500/30 flex items-center gap-3.5">
           <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xl font-bold font-mono text-white">{currentGradeSubjects.length} مادة</div>
-            <div className="text-xs text-gray-400">مواد الصف المختار حالياً</div>
+            <div className="text-xl font-bold font-mono text-slate-900">{currentGradeSubjects.length} مادة</div>
+            <div className="text-xs text-slate-500">مواد الصف المختار حالياً</div>
           </div>
         </div>
       </div>
@@ -349,11 +349,11 @@ export default function AdminGradesPage() {
       {/* قسم استعراض الصفوف واختيار الصف */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-bold text-white flex items-center gap-2">
-            <Layers className="w-4 h-4 text-rose-400" />
+          <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+            <Layers className="w-4 h-4 text-blue-600" />
             <span>الصفوف والمراحل الدراسية المسجلة ({academicGrades.length})</span>
           </h2>
-          <span className="text-xs text-gray-400">
+          <span className="text-xs text-slate-500">
             اضغط على أي صف لعرض وتخصيص المواد التابعة له
           </span>
         </div>
@@ -370,11 +370,11 @@ export default function AdminGradesPage() {
                 className={`p-4 rounded-2xl transition-all duration-200 cursor-pointer border text-right relative group ${
                   isSelected
                     ? 'bg-rose-950/30 border-rose-500/70 shadow-lg shadow-rose-950/40'
-                    : 'glass-card border-gray-800 hover:border-gray-700'
+                    : 'bg-white border border-slate-200 shadow-sm border-slate-200 hover:border-gray-700'
                 }`}
               >
                 <div className="flex items-start justify-between gap-2 mb-2">
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 text-[10px] font-bold border border-rose-500/30">
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-500/20 text-blue-700 text-[10px] font-bold border border-rose-500/30">
                     <span>{grade.stage}</span>
                   </div>
 
@@ -383,31 +383,31 @@ export default function AdminGradesPage() {
                     <button
                       onClick={e => handleOpenEditGrade(grade, e)}
                       title="تعديل الصف"
-                      className="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition"
+                      className="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-slate-700 hover:text-slate-900 transition"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={e => handleDeleteGrade(grade.id, grade.nameAr, e)}
                       title="حذف الصف"
-                      className="p-1.5 rounded-lg bg-gray-800 hover:bg-rose-600/30 text-gray-400 hover:text-rose-300 transition"
+                      className="p-1.5 rounded-lg bg-gray-800 hover:bg-rose-600/30 text-slate-500 hover:text-blue-700 transition"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
 
-                <h3 className="text-base font-bold text-white group-hover:text-rose-300 transition">
+                <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-700 transition">
                   {grade.nameAr}
                 </h3>
-                <div className="text-[11px] font-mono text-gray-400 mt-0.5">{grade.nameEn}</div>
-                <p className="text-xs text-gray-400 mt-1.5 line-clamp-2 leading-relaxed">
+                <div className="text-[11px] font-mono text-slate-500 mt-0.5">{grade.nameEn}</div>
+                <p className="text-xs text-slate-500 mt-1.5 line-clamp-2 leading-relaxed">
                   {grade.description}
                 </p>
 
-                <div className="mt-4 pt-3 border-t border-gray-800/80 flex items-center justify-between text-xs">
-                  <span className="text-gray-400">المواد المحددة:</span>
-                  <span className="font-mono font-bold text-cyan-300 px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/30">
+                <div className="mt-4 pt-3 border-t border-slate-200/80 flex items-center justify-between text-xs">
+                  <span className="text-slate-500">المواد المحددة:</span>
+                  <span className="font-mono font-bold text-blue-700 px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/30">
                     {subsCount} مادة مقررة
                   </span>
                 </div>
@@ -425,18 +425,18 @@ export default function AdminGradesPage() {
 
       {/* منطقة إدارة المواد التابعة للصف المختار */}
       {activeGrade && (
-        <div className="p-6 rounded-3xl glass-card border border-gray-800 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-800">
+        <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-rose-400 uppercase tracking-wider">
+                <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">
                   المقررات والمناهج التابعة
                 </span>
                 <span className="text-xs text-gray-500">&bull;</span>
-                <span className="text-xs text-gray-300 font-bold">{activeGrade.nameAr}</span>
+                <span className="text-xs text-slate-700 font-bold">{activeGrade.nameAr}</span>
               </div>
-              <h2 className="text-xl font-extrabold text-white mt-1 flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-cyan-400" />
+              <h2 className="text-xl font-extrabold text-slate-900 mt-1 flex items-center gap-2">
+                <BookOpen className="w-5 h-5 text-blue-600" />
                 <span>المواد المقررة لهذا الصف ({currentGradeSubjects.length})</span>
               </h2>
             </div>
@@ -444,19 +444,19 @@ export default function AdminGradesPage() {
             <div className="flex items-center gap-3">
               {/* شريط البحث في المواد */}
               <div className="relative w-full sm:w-64">
-                <Search className="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2" />
+                <Search className="w-4 h-4 text-slate-500 absolute right-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   value={subjectSearch}
                   onChange={e => setSubjectSearch(e.target.value)}
                   placeholder="بحث في مواد هذا الصف..."
-                  className="w-full bg-gray-900 border border-gray-800 rounded-xl pr-9 pl-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
+                  className="w-full bg-white border border-slate-200 rounded-xl pr-9 pl-3 py-2 text-xs text-slate-900 placeholder-gray-500 focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <button
                 onClick={() => handleOpenAddSubject(activeGrade.id)}
-                className="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs flex items-center gap-1.5 shrink-0 shadow-md transition"
+                className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-slate-900 shadow-sm font-bold text-xs flex items-center gap-1.5 shrink-0 shadow-md transition"
               >
                 <Plus className="w-4 h-4" />
                 <span>+ مادة جديدة لـ {activeGrade.nameAr}</span>
@@ -466,15 +466,15 @@ export default function AdminGradesPage() {
 
           {/* شبكة المواد الدراسية */}
           {filteredSubjects.length === 0 ? (
-            <div className="p-12 text-center rounded-2xl bg-gray-950/40 border border-gray-800/80 space-y-3">
+            <div className="p-12 text-center rounded-2xl bg-slate-50/40 border border-slate-200/80 space-y-3">
               <BookOpen className="w-10 h-10 text-gray-600 mx-auto" />
-              <h3 className="text-base font-bold text-white">لا توجد مواد مضافة لهذا الصف بعد</h3>
-              <p className="text-xs text-gray-400 max-w-md mx-auto">
+              <h3 className="text-base font-bold text-slate-900">لا توجد مواد مضافة لهذا الصف بعد</h3>
+              <p className="text-xs text-slate-500 max-w-md mx-auto">
                 قم بالضغط على زر &quot;إضافة مادة جديدة&quot; لتحديد المقررات والمذكرات المعتمدة لطلاب هذا الصف.
               </p>
               <button
                 onClick={() => handleOpenAddSubject(activeGrade.id)}
-                className="mt-2 px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs inline-flex items-center gap-2"
+                className="mt-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-slate-900 shadow-sm font-bold text-xs inline-flex items-center gap-2"
               >
                 <Plus className="w-4 h-4" />
                 <span>إضافة أول مادة دراسية للصف</span>
@@ -488,7 +488,7 @@ export default function AdminGradesPage() {
                 return (
                   <div
                     key={subject.id}
-                    className="p-5 rounded-2xl bg-gray-950/60 border border-gray-800/80 hover:border-cyan-500/40 flex flex-col justify-between transition-all duration-200 group shadow-lg"
+                    className="p-5 rounded-2xl bg-slate-50/60 border border-slate-200/80 hover:border-cyan-500/40 flex flex-col justify-between transition-all duration-200 group shadow-lg"
                   >
                     <div>
                       <div className="flex items-center justify-between mb-3">
@@ -507,21 +507,21 @@ export default function AdminGradesPage() {
                           <button
                             onClick={() => handleOpenMoveSubject(subject)}
                             title="نقل المادة لصف دراسي آخر"
-                            className="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-cyan-300 transition"
+                            className="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-slate-700 hover:text-blue-700 transition"
                           >
                             <ArrowRightLeft className="w-3.5 h-3.5" />
                           </button>
                           <button
                             onClick={() => handleOpenEditSubject(subject)}
                             title="تعديل المادة"
-                            className="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition"
+                            className="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-slate-700 hover:text-slate-900 transition"
                           >
                             <Edit2 className="w-3.5 h-3.5" />
                           </button>
                           <button
                             onClick={() => handleDeleteSubject(subject.id, subject.nameAr)}
                             title="حذف المادة"
-                            className="p-1.5 rounded-lg bg-gray-800 hover:bg-rose-600/30 text-gray-400 hover:text-rose-300 transition"
+                            className="p-1.5 rounded-lg bg-gray-800 hover:bg-rose-600/30 text-slate-500 hover:text-blue-700 transition"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -530,7 +530,7 @@ export default function AdminGradesPage() {
 
                       <div className="space-y-1">
                         <div className="flex items-center justify-between">
-                          <h4 className="text-base font-bold text-white group-hover:text-cyan-300 transition">
+                          <h4 className="text-base font-bold text-slate-900 group-hover:text-blue-700 transition">
                             {subject.nameAr}
                           </h4>
                           <span
@@ -538,16 +538,16 @@ export default function AdminGradesPage() {
                             style={{ backgroundColor: subject.color }}
                           />
                         </div>
-                        <div className="text-[11px] font-mono text-gray-400">{subject.nameEn}</div>
-                        <p className="text-xs text-gray-400 line-clamp-2 mt-1 leading-relaxed">
+                        <div className="text-[11px] font-mono text-slate-500">{subject.nameEn}</div>
+                        <p className="text-xs text-slate-500 line-clamp-2 mt-1 leading-relaxed">
                           {subject.description}
                         </p>
                       </div>
                     </div>
 
-                    <div className="mt-4 pt-3 border-t border-gray-800/80 flex items-center justify-between text-[11px] text-gray-400">
+                    <div className="mt-4 pt-3 border-t border-slate-200/80 flex items-center justify-between text-[11px] text-slate-500">
                       <span className="font-mono text-gray-500">ID: {subject.id}</span>
-                      <span className="px-2 py-0.5 rounded bg-gray-900 text-gray-300 border border-gray-800 font-semibold">
+                      <span className="px-2 py-0.5 rounded bg-white text-slate-700 border border-slate-200 font-semibold">
                         {activeGrade.nameAr}
                       </span>
                     </div>
@@ -564,19 +564,19 @@ export default function AdminGradesPage() {
       {/* ========================================================= */}
       {gradeModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="relative w-full max-w-lg rounded-3xl glass-card border border-rose-500/40 p-6 sm:p-7 shadow-2xl text-right">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-800 mb-5">
+          <div className="relative w-full max-w-lg rounded-3xl bg-white border border-slate-200 shadow-sm border border-rose-500/40 p-6 sm:p-7 shadow-2xl text-right">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200 mb-5">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-rose-500/20 text-blue-600 flex items-center justify-center">
                   <Layers className="w-4 h-4" />
                 </div>
-                <h3 className="text-base font-extrabold text-white">
+                <h3 className="text-base font-extrabold text-slate-900">
                   {editingGrade ? 'تعديل بيانات الصف الدراسي' : 'إضافة صف دراسي جديد للمنصة'}
                 </h3>
               </div>
               <button
                 onClick={() => setGradeModalOpen(false)}
-                className="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white"
+                className="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-slate-500 hover:text-slate-900"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -584,7 +584,7 @@ export default function AdminGradesPage() {
 
             <form onSubmit={handleSaveGrade} className="space-y-4 text-xs">
               <div>
-                <label className="text-gray-300 font-semibold block mb-1">
+                <label className="text-slate-700 font-semibold block mb-1">
                   اسم الصف بالعربية *
                 </label>
                 <input
@@ -593,12 +593,12 @@ export default function AdminGradesPage() {
                   placeholder="مثال: الصف الأول الإعدادي، الصف الثالث الثانوي"
                   value={gradeNameAr}
                   onChange={e => setGradeNameAr(e.target.value)}
-                  className="w-full bg-gray-900 border border-gray-800 rounded-xl px-3.5 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-rose-400"
+                  className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 placeholder-gray-500 focus:outline-none focus:border-rose-400"
                 />
               </div>
 
               <div>
-                <label className="text-gray-300 font-semibold block mb-1">
+                <label className="text-slate-700 font-semibold block mb-1">
                   اسم الصف بالإنجليزية (أو الرمز)
                 </label>
                 <input
@@ -606,18 +606,18 @@ export default function AdminGradesPage() {
                   placeholder="مثال: 1st Preparatory, 3rd Secondary"
                   value={gradeNameEn}
                   onChange={e => setGradeNameEn(e.target.value)}
-                  className="w-full bg-gray-900 border border-gray-800 rounded-xl px-3.5 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-rose-400 font-mono"
+                  className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 placeholder-gray-500 focus:outline-none focus:border-rose-400 font-mono"
                 />
               </div>
 
               <div>
-                <label className="text-gray-300 font-semibold block mb-1">
+                <label className="text-slate-700 font-semibold block mb-1">
                   المرحلة التعليمية العامة *
                 </label>
                 <select
                   value={gradeStage}
                   onChange={e => setGradeStage(e.target.value)}
-                  className="w-full bg-gray-900 border border-gray-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-rose-400"
+                  className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:border-rose-400"
                 >
                   <option value="المرحلة الثانوية">المرحلة الثانوية (Secondary Stage)</option>
                   <option value="المرحلة الإعدادية">المرحلة الإعدادية (Preparatory Stage)</option>
@@ -627,7 +627,7 @@ export default function AdminGradesPage() {
               </div>
 
               <div>
-                <label className="text-gray-300 font-semibold block mb-1">
+                <label className="text-slate-700 font-semibold block mb-1">
                   وصف تعريفي ونبذة عن المنهج
                 </label>
                 <textarea
@@ -635,21 +635,21 @@ export default function AdminGradesPage() {
                   placeholder="اكتب نبذة مختصرة عن المقررات وطبيعة المنهج الدراسي لهذا الصف..."
                   value={gradeDescription}
                   onChange={e => setGradeDescription(e.target.value)}
-                  className="w-full bg-gray-900 border border-gray-800 rounded-xl p-3 text-white placeholder-gray-500 focus:outline-none focus:border-rose-400 resize-none"
+                  className="w-full bg-white border border-slate-200 rounded-xl p-3 text-slate-900 placeholder-gray-500 focus:outline-none focus:border-rose-400 resize-none"
                 />
               </div>
 
-              <div className="pt-3 flex justify-end gap-2.5 border-t border-gray-800">
+              <div className="pt-3 flex justify-end gap-2.5 border-t border-slate-200">
                 <button
                   type="button"
                   onClick={() => setGradeModalOpen(false)}
-                  className="px-4 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold transition"
+                  className="px-4 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-slate-700 font-bold transition"
                 >
                   إلغاء
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold shadow-lg shadow-rose-600/30 transition"
+                  className="px-6 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-slate-900 font-extrabold shadow-lg shadow-rose-600/30 transition"
                 >
                   {editingGrade ? 'حفظ التعديلات' : 'إضافة الصف فوراً'}
                 </button>
@@ -664,19 +664,19 @@ export default function AdminGradesPage() {
       {/* ========================================================= */}
       {subjectModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="relative w-full max-w-lg rounded-3xl glass-card border border-cyan-500/40 p-6 sm:p-7 shadow-2xl text-right">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-800 mb-5">
+          <div className="relative w-full max-w-lg rounded-3xl bg-white border border-slate-200 shadow-sm border border-cyan-500/40 p-6 sm:p-7 shadow-2xl text-right">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200 mb-5">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-cyan-500/20 text-blue-600 flex items-center justify-center">
                   <BookOpen className="w-4 h-4" />
                 </div>
-                <h3 className="text-base font-extrabold text-white">
+                <h3 className="text-base font-extrabold text-slate-900">
                   {editingSubject ? 'تعديل بيانات المادة الدراسية' : 'إضافة مادة دراسية جديدة للصف'}
                 </h3>
               </div>
               <button
                 onClick={() => setSubjectModalOpen(false)}
-                className="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white"
+                className="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-slate-500 hover:text-slate-900"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -684,13 +684,13 @@ export default function AdminGradesPage() {
 
             <form onSubmit={handleSaveSubject} className="space-y-4 text-xs">
               <div>
-                <label className="text-gray-300 font-semibold block mb-1">
+                <label className="text-slate-700 font-semibold block mb-1">
                   الصف الدراسي التابع له هذه المادة *
                 </label>
                 <select
                   value={subjectGradeId}
                   onChange={e => setSubjectGradeId(e.target.value)}
-                  className="w-full bg-gray-900 border border-gray-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-cyan-400"
+                  className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:border-blue-500"
                 >
                   {academicGrades.map(g => (
                     <option key={g.id} value={g.id}>
@@ -702,7 +702,7 @@ export default function AdminGradesPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="text-gray-300 font-semibold block mb-1">
+                  <label className="text-slate-700 font-semibold block mb-1">
                     اسم المادة بالعربية *
                   </label>
                   <input
@@ -711,12 +711,12 @@ export default function AdminGradesPage() {
                     placeholder="مثال: الفيزياء، الكيمياء، الفلسفة"
                     value={subjectNameAr}
                     onChange={e => setSubjectNameAr(e.target.value)}
-                    className="w-full bg-gray-900 border border-gray-800 rounded-xl px-3.5 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400"
+                    className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 placeholder-gray-500 focus:outline-none focus:border-blue-500"
                   />
                 </div>
 
                 <div>
-                  <label className="text-gray-300 font-semibold block mb-1">
+                  <label className="text-slate-700 font-semibold block mb-1">
                     اسم المادة بالإنجليزية
                   </label>
                   <input
@@ -724,15 +724,15 @@ export default function AdminGradesPage() {
                     placeholder="مثال: Physics, Chemistry"
                     value={subjectNameEn}
                     onChange={e => setSubjectNameEn(e.target.value)}
-                    className="w-full bg-gray-900 border border-gray-800 rounded-xl px-3.5 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400 font-mono"
+                    className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 placeholder-gray-500 focus:outline-none focus:border-blue-500 font-mono"
                   />
                 </div>
               </div>
 
               {/* اختيار الأيقونة واللون */}
-              <div className="space-y-3 p-3.5 rounded-2xl bg-gray-950/60 border border-gray-800">
+              <div className="space-y-3 p-3.5 rounded-2xl bg-slate-50/60 border border-slate-200">
                 <div>
-                  <label className="text-gray-300 font-semibold block mb-1.5">
+                  <label className="text-slate-700 font-semibold block mb-1.5">
                     أيقونة المادة التعبيرية:
                   </label>
                   <div className="grid grid-cols-5 gap-2">
@@ -746,8 +746,8 @@ export default function AdminGradesPage() {
                           onClick={() => setSubjectIcon(ico.id)}
                           className={`p-2 rounded-xl border flex flex-col items-center gap-1 transition ${
                             isChosen
-                              ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 font-bold'
-                              : 'bg-gray-900 border-gray-800 text-gray-400 hover:text-white'
+                              ? 'bg-cyan-500/20 border-cyan-400 text-blue-700 font-bold'
+                              : 'bg-white border-slate-200 text-slate-500 hover:text-slate-900'
                           }`}
                         >
                           <IconComp className="w-4 h-4" />
@@ -759,8 +759,8 @@ export default function AdminGradesPage() {
                 </div>
 
                 <div>
-                  <label className="text-gray-300 font-semibold block mb-1.5 flex items-center gap-1.5">
-                    <Palette className="w-3.5 h-3.5 text-cyan-400" />
+                  <label className="text-slate-700 font-semibold block mb-1.5 flex items-center gap-1.5">
+                    <Palette className="w-3.5 h-3.5 text-blue-600" />
                     <span>اللون المميز للمادة:</span>
                   </label>
                   <div className="flex items-center gap-2 flex-wrap">
@@ -775,7 +775,7 @@ export default function AdminGradesPage() {
                         style={{ backgroundColor: col.hex }}
                         title={col.name}
                       >
-                        {subjectColor === col.hex && <Check className="w-3.5 h-3.5 text-white" />}
+                        {subjectColor === col.hex && <Check className="w-3.5 h-3.5 text-slate-900" />}
                       </button>
                     ))}
                   </div>
@@ -783,7 +783,7 @@ export default function AdminGradesPage() {
               </div>
 
               <div>
-                <label className="text-gray-300 font-semibold block mb-1">
+                <label className="text-slate-700 font-semibold block mb-1">
                   نبذة ووصف محتويات المادة
                 </label>
                 <textarea
@@ -791,21 +791,21 @@ export default function AdminGradesPage() {
                   placeholder="موضوعات المنهج والأبواب الرئيسية..."
                   value={subjectDescription}
                   onChange={e => setSubjectDescription(e.target.value)}
-                  className="w-full bg-gray-900 border border-gray-800 rounded-xl p-3 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400 resize-none"
+                  className="w-full bg-white border border-slate-200 rounded-xl p-3 text-slate-900 placeholder-gray-500 focus:outline-none focus:border-blue-500 resize-none"
                 />
               </div>
 
-              <div className="pt-3 flex justify-end gap-2.5 border-t border-gray-800">
+              <div className="pt-3 flex justify-end gap-2.5 border-t border-slate-200">
                 <button
                   type="button"
                   onClick={() => setSubjectModalOpen(false)}
-                  className="px-4 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold transition"
+                  className="px-4 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-slate-700 font-bold transition"
                 >
                   إلغاء
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-extrabold shadow-lg shadow-cyan-600/30 transition"
+                  className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-slate-900 shadow-sm font-extrabold shadow-lg shadow-cyan-600/30 transition"
                 >
                   {editingSubject ? 'حفظ تعديل المادة' : 'إضافة المادة فوراً'}
                 </button>
@@ -820,33 +820,33 @@ export default function AdminGradesPage() {
       {/* ========================================================= */}
       {moveModalOpen && movingSubject && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="relative w-full max-w-md rounded-3xl glass-card border border-indigo-500/40 p-6 shadow-2xl text-right">
-            <div className="flex items-center justify-between pb-3 border-b border-gray-800 mb-4">
+          <div className="relative w-full max-w-md rounded-3xl bg-white border border-slate-200 shadow-sm border border-indigo-500/40 p-6 shadow-2xl text-right">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200 mb-4">
               <div className="flex items-center gap-2">
                 <ArrowRightLeft className="w-5 h-5 text-indigo-400" />
-                <h3 className="text-base font-bold text-white">
+                <h3 className="text-base font-bold text-slate-900">
                   نقل مادة ({movingSubject.nameAr})
                 </h3>
               </div>
               <button
                 onClick={() => setMoveModalOpen(false)}
-                className="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white"
+                className="p-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-slate-500 hover:text-slate-900"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <div className="space-y-4 text-xs">
-              <p className="text-gray-300 leading-relaxed">
+              <p className="text-slate-700 leading-relaxed">
                 اختر الصف الدراسي الجديد الذي تريد نقل هذه المادة إليه وتعيينها له:
               </p>
 
               <div>
-                <label className="text-gray-400 font-semibold block mb-1">الصف الدراسي المستهدف:</label>
+                <label className="text-slate-500 font-semibold block mb-1">الصف الدراسي المستهدف:</label>
                 <select
                   value={targetMoveGradeId}
                   onChange={e => setTargetMoveGradeId(e.target.value)}
-                  className="w-full bg-gray-900 border border-gray-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-indigo-400"
+                  className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 focus:outline-none focus:border-indigo-400"
                 >
                   {academicGrades
                     .filter(g => g.id !== movingSubject.gradeId)
@@ -858,18 +858,18 @@ export default function AdminGradesPage() {
                 </select>
               </div>
 
-              <div className="pt-3 flex justify-end gap-2 border-t border-gray-800">
+              <div className="pt-3 flex justify-end gap-2 border-t border-slate-200">
                 <button
                   type="button"
                   onClick={() => setMoveModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 font-bold"
+                  className="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-slate-700 font-bold"
                 >
                   إلغاء
                 </button>
                 <button
                   type="button"
                   onClick={handleConfirmMove}
-                  className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-600/30"
+                  className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-slate-900 font-bold shadow-lg shadow-indigo-600/30"
                 >
                   تأكيد النقل الآن
                 </button>

@@ -33,14 +33,14 @@ export default function AdminPayoutsPage() {
   return (
     <div className="space-y-8 font-sans">
       <div>
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs font-semibold mb-2">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold mb-2">
           <DollarSign className="w-3.5 h-3.5" />
           <span>العمليات المالية وتسوية أرباح المعلمين</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
           طلبات سحب وتحويل مستحقات المعلمين
         </h1>
-        <p className="text-sm text-gray-400 mt-1">
+        <p className="text-sm text-slate-500 mt-1">
           مراجعة طلبات سحب الأرباح المقدمة من مدرسي الثانوية العامة، التحقق من الرصيد والنسب، وتنفيذ التحويلات البنكية أو المحافظ الإلكترونية.
         </p>
       </div>
@@ -51,7 +51,7 @@ export default function AdminPayoutsPage() {
             <CheckCircle2 className="w-4 h-4 shrink-0" />
             <span>{notification}</span>
           </div>
-          <button onClick={() => setNotification(null)} className="text-emerald-400 hover:text-white">
+          <button onClick={() => setNotification(null)} className="text-emerald-400 hover:text-slate-900">
             إغلاق
           </button>
         </div>
@@ -59,28 +59,28 @@ export default function AdminPayoutsPage() {
 
       {/* مؤشرات الأرقام المالية */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 text-right">
-        <div className="p-6 rounded-3xl glass-card border border-gray-800">
-          <div className="text-xs text-gray-400">إجمالي الطلبات المعلقة</div>
-          <div className="text-3xl font-extrabold text-amber-300 mt-2">{pendingTotal.toLocaleString()} ج.م</div>
+        <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm">
+          <div className="text-xs text-slate-500">إجمالي الطلبات المعلقة</div>
+          <div className="text-3xl font-extrabold text-amber-700 font-bold mt-2">{pendingTotal.toLocaleString()} ج.م</div>
           <div className="text-xs text-amber-400/80 mt-1">{pendingPayouts.length} طلبات في قائمة الانتظار</div>
         </div>
 
-        <div className="p-6 rounded-3xl glass-card border border-gray-800">
-          <div className="text-xs text-gray-400">إجمالي الأرباح المسددة</div>
+        <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm">
+          <div className="text-xs text-slate-500">إجمالي الأرباح المسددة</div>
           <div className="text-3xl font-extrabold text-emerald-400 mt-2">{paidTotal.toLocaleString()} ج.م</div>
-          <div className="text-xs text-gray-400 mt-1">عبر انستاباي والمحافظ الإلكترونية</div>
+          <div className="text-xs text-slate-500 mt-1">عبر انستاباي والمحافظ الإلكترونية</div>
         </div>
 
-        <div className="p-6 rounded-3xl glass-card border border-gray-800">
-          <div className="text-xs text-gray-400">الحد الأدنى لطلب السحب</div>
-          <div className="text-3xl font-extrabold text-white mt-2">1,000 ج.م</div>
-          <div className="text-xs text-cyan-400 mt-1">محدد في سياسة المنصة</div>
+        <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm">
+          <div className="text-xs text-slate-500">الحد الأدنى لطلب السحب</div>
+          <div className="text-3xl font-extrabold text-slate-900 mt-2">1,000 ج.م</div>
+          <div className="text-xs text-blue-600 mt-1">محدد في سياسة المنصة</div>
         </div>
       </div>
 
       {/* قسم الطلبات المعلقة بانتظار الاعتماد */}
       <div className="space-y-4 text-right">
-        <h2 className="text-lg font-bold text-white flex items-center gap-2">
+        <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
           <Clock className="w-5 h-5 text-amber-400" />
           <span>طلبات السحب المعلقة ({pendingPayouts.length})</span>
         </h2>
@@ -90,19 +90,19 @@ export default function AdminPayoutsPage() {
             {pendingPayouts.map(p => (
               <div
                 key={p.id}
-                className="p-5 rounded-3xl glass-card border border-amber-500/30 flex flex-col md:flex-row md:items-center justify-between gap-4"
+                className="p-5 rounded-3xl bg-white border border-slate-200 shadow-sm border border-amber-500/30 flex flex-col md:flex-row md:items-center justify-between gap-4"
               >
                 <div className="flex items-center gap-4">
                   <img src={p.instructorAvatar} alt={p.instructorName} className="w-12 h-12 rounded-full object-cover ring-2 ring-amber-500/30" />
                   <div>
                     <div className="flex items-center gap-2">
-                      <h3 className="text-sm font-bold text-white">{p.instructorName}</h3>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">
+                      <h3 className="text-sm font-bold text-slate-900">{p.instructorName}</h3>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-700 font-bold">
                         {p.id}
                       </span>
                     </div>
-                    <div className="text-xs text-gray-400 mt-1">
-                      الوسيلة: <span className="text-gray-200 font-semibold">{p.method}</span> &bull; الحساب/الرقم: <span className="font-mono text-cyan-400">{p.accountDetails}</span>
+                    <div className="text-xs text-slate-500 mt-1">
+                      الوسيلة: <span className="text-slate-800 font-semibold">{p.method}</span> &bull; الحساب/الرقم: <span className="font-mono text-blue-600">{p.accountDetails}</span>
                     </div>
                     <div className="text-[11px] text-gray-500 mt-0.5">
                       تاريخ الطلب: {new Date(p.requestedAt).toLocaleDateString('ar-EG')}
@@ -112,7 +112,7 @@ export default function AdminPayoutsPage() {
 
                 <div className="flex items-center gap-4 self-end md:self-center">
                   <div className="text-left md:text-right">
-                    <span className="text-[10px] text-gray-400 block">المبلغ المطلوب</span>
+                    <span className="text-[10px] text-slate-500 block">المبلغ المطلوب</span>
                     <span className="text-xl font-extrabold text-amber-400 font-mono">
                       {p.amount.toLocaleString()} ج.م
                     </span>
@@ -121,13 +121,13 @@ export default function AdminPayoutsPage() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleReject(p.id, p.instructorName)}
-                      className="px-3.5 py-2 rounded-xl bg-gray-800 hover:bg-rose-950 text-rose-400 border border-gray-700 hover:border-rose-800 text-xs font-semibold transition"
+                      className="px-3.5 py-2 rounded-xl bg-gray-800 hover:bg-rose-950 text-blue-600 border border-gray-700 hover:border-rose-800 text-xs font-semibold transition"
                     >
                       رفض
                     </button>
                     <button
                       onClick={() => handleApprove(p.id, p.instructorName, p.amount)}
-                      className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-lg shadow-emerald-600/30 transition"
+                      className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-900 text-xs font-bold flex items-center gap-1.5 shadow-lg shadow-emerald-600/30 transition"
                     >
                       <CheckCircle2 className="w-3.5 h-3.5" />
                       <span>اعتماد وصرف</span>
@@ -138,7 +138,7 @@ export default function AdminPayoutsPage() {
             ))}
           </div>
         ) : (
-          <div className="p-8 rounded-2xl glass-card border border-gray-800 text-center text-gray-400">
+          <div className="p-8 rounded-2xl bg-white border border-slate-200 shadow-sm text-center text-slate-500">
             لا توجد أي طلبات سحب معلقة حالياً. جميع مستحقات المعلمين مسواة ومسددة بالكامل.
           </div>
         )}
@@ -146,12 +146,12 @@ export default function AdminPayoutsPage() {
 
       {/* سجل طلبات السحب المكتملة والمرفوضة */}
       <div className="space-y-4 text-right">
-        <h2 className="text-lg font-bold text-white">سجل العمليات السابقة ({pastPayouts.length})</h2>
+        <h2 className="text-lg font-bold text-slate-900">سجل العمليات السابقة ({pastPayouts.length})</h2>
 
-        <div className="rounded-3xl glass-card border border-gray-800 overflow-hidden shadow-xl">
+        <div className="rounded-3xl bg-white border border-slate-200 shadow-sm overflow-hidden shadow-xl">
           <div className="overflow-x-auto">
             <table className="w-full text-right text-xs">
-              <thead className="bg-gray-900/80 text-gray-400 uppercase tracking-wider text-[10px] border-b border-gray-800">
+              <thead className="bg-white/80 text-slate-500 uppercase tracking-wider text-[10px] border-b border-slate-200">
                 <tr>
                   <th className="py-3.5 px-4">رقم المعاملة</th>
                   <th className="py-3.5 px-4">المعلم</th>
@@ -161,16 +161,16 @@ export default function AdminPayoutsPage() {
                   <th className="py-3.5 px-4 text-left">الحالة</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800 text-gray-300">
+              <tbody className="divide-y divide-gray-800 text-slate-700">
                 {pastPayouts.map(p => {
                   const isPaid = p.status === 'PAID';
                   return (
-                    <tr key={p.id} className="hover:bg-gray-800/40 transition">
-                      <td className="py-3.5 px-4 font-mono font-medium text-cyan-400">{p.id}</td>
-                      <td className="py-3.5 px-4 font-semibold text-white">{p.instructorName}</td>
-                      <td className="py-3.5 px-4 font-bold text-white font-mono">{p.amount.toLocaleString()} ج.م</td>
-                      <td className="py-3.5 px-4 text-gray-300">{p.method}</td>
-                      <td className="py-3.5 px-4 text-gray-400">
+                    <tr key={p.id} className="hover:bg-slate-50 transition">
+                      <td className="py-3.5 px-4 font-mono font-medium text-blue-600">{p.id}</td>
+                      <td className="py-3.5 px-4 font-semibold text-slate-900">{p.instructorName}</td>
+                      <td className="py-3.5 px-4 font-bold text-slate-900 font-mono">{p.amount.toLocaleString()} ج.م</td>
+                      <td className="py-3.5 px-4 text-slate-700">{p.method}</td>
+                      <td className="py-3.5 px-4 text-slate-500">
                         {new Date(p.requestedAt).toLocaleDateString('ar-EG')}
                       </td>
                       <td className="py-3.5 px-4 text-left">
@@ -178,7 +178,7 @@ export default function AdminPayoutsPage() {
                           className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
                             isPaid
                               ? 'bg-emerald-500/20 text-emerald-300'
-                              : 'bg-rose-500/20 text-rose-300'
+                              : 'bg-rose-500/20 text-blue-700'
                           }`}
                         >
                           {isPaid ? <CheckCircle2 className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}

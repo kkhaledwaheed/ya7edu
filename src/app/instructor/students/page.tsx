@@ -38,38 +38,38 @@ export default function InstructorStudentsPage() {
   );
 
   return (
-    <div className="space-y-8 font-sans text-right">
+    <div className="space-y-8 font-sans text-right pb-16">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-xs font-semibold mb-2">
-            <GraduationCap className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold mb-2">
+            <GraduationCap className="w-3.5 h-3.5 text-blue-600" />
             <span>متابعة وتقييم أداء الطلاب</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             سجل الطلاب ونسب إنجاز الحصص
           </h1>
-          <p className="text-sm text-gray-400 mt-1">
+          <p className="text-sm text-slate-500 mt-1">
             متابعة معدلات حضور ومشاهدة محاضرات مادتك، نتائج الامتحانات التراكمية، ومؤشرات التفوق.
           </p>
         </div>
 
         <div className="relative w-full sm:w-72">
-          <Search className="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             placeholder="بحث باسم الطالب أو المنهج..."
-            className="w-full bg-gray-900 border border-gray-800 rounded-xl pr-9 pl-4 py-2 text-xs text-gray-200 placeholder-gray-500 focus:outline-none focus:border-cyan-400"
+            className="w-full bg-white border border-slate-300 rounded-xl pr-9 pl-4 py-2 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500"
           />
         </div>
       </div>
 
       {/* جدول قائمة الطلاب */}
-      <div className="rounded-3xl glass-card border border-gray-800 overflow-hidden shadow-xl">
+      <div className="rounded-3xl bg-white border border-slate-200 overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-right text-xs">
-            <thead className="bg-gray-900/80 text-gray-400 uppercase tracking-wider text-[10px] border-b border-gray-800">
+            <thead className="bg-slate-50 text-slate-600 uppercase tracking-wider text-[10px] border-b border-slate-200">
               <tr>
                 <th className="py-3.5 px-4">الطالب</th>
                 <th className="py-3.5 px-4">المنهج / المادة</th>
@@ -79,57 +79,57 @@ export default function InstructorStudentsPage() {
                 <th className="py-3.5 px-4 text-left">الحالة الأكاديمية</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800 text-gray-300">
+            <tbody className="divide-y divide-slate-100 text-slate-700">
               {filtered.map(({ enrollment, student, course }) => {
                 const isComplete = enrollment.progressPercent === 100;
                 return (
-                  <tr key={enrollment.id} className="hover:bg-gray-800/40 transition">
+                  <tr key={enrollment.id} className="hover:bg-slate-50 transition">
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-3">
                         <img
                           src={student.avatar}
                           alt={student.name}
-                          className="w-8 h-8 rounded-full object-cover ring-1 ring-gray-700"
+                          className="w-8 h-8 rounded-full object-cover ring-1 ring-slate-200"
                         />
                         <div>
-                          <div className="font-semibold text-white">{student.name}</div>
-                          <div className="text-[11px] text-gray-400 font-mono">{student.email}</div>
+                          <div className="font-semibold text-slate-900">{student.name}</div>
+                          <div className="text-[11px] text-slate-400 font-mono">{student.email}</div>
                         </div>
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 font-medium text-gray-200 max-w-xs truncate">
+                    <td className="py-3.5 px-4 font-medium text-slate-800 max-w-xs truncate">
                       {course?.title || 'منهج الفيزياء'}
                     </td>
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-2">
-                        <div className="w-16 h-1.5 rounded-full bg-gray-800 overflow-hidden">
+                        <div className="w-16 h-1.5 rounded-full bg-slate-100 overflow-hidden">
                           <div
                             className={`h-full rounded-full ${
-                              isComplete ? 'bg-emerald-400' : 'bg-cyan-500'
+                              isComplete ? 'bg-emerald-500' : 'bg-blue-600'
                             }`}
                             style={{ width: `${enrollment.progressPercent}%` }}
                           />
                         </div>
-                        <span className="font-mono text-gray-300 text-[11px]">
+                        <span className="font-mono text-slate-600 text-[11px]">
                           {enrollment.progressPercent}%
                         </span>
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 font-mono text-gray-300">
+                    <td className="py-3.5 px-4 font-mono text-slate-600">
                       {enrollment.completedLessonIds.length} حصص
                     </td>
-                    <td className="py-3.5 px-4 text-gray-400">
+                    <td className="py-3.5 px-4 text-slate-500">
                       {new Date(enrollment.enrolledAt).toLocaleDateString('ar-EG')}
                     </td>
                     <td className="py-3.5 px-4 text-left">
                       <span
                         className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
                           isComplete
-                            ? 'bg-emerald-500/20 text-emerald-300'
-                            : 'bg-cyan-500/20 text-cyan-300'
+                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                            : 'bg-blue-50 text-blue-700 border border-blue-200'
                         }`}
                       >
-                        {isComplete ? <Award className="w-3 h-3" /> : <Clock className="w-3 h-3" />}
+                        {isComplete ? <Award className="w-3 h-3 text-emerald-600" /> : <Clock className="w-3 h-3 text-blue-600" />}
                         <span>{isComplete ? 'مكتمل ومؤهل للشهادة' : 'متابع ونشط'}</span>
                       </span>
                     </td>

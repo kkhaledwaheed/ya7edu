@@ -29,16 +29,16 @@ export default function InstructorQAPage() {
   };
 
   return (
-    <div className="space-y-8 font-sans text-right">
+    <div className="space-y-8 font-sans text-right pb-16">
       <div>
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-xs font-semibold mb-2">
-          <MessageSquare className="w-3.5 h-3.5" />
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold mb-2">
+          <MessageSquare className="w-3.5 h-3.5 text-blue-600" />
           <span>تفاعل المعلم وإجابة الاستفسارات</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
           مركز أسئلة ومراجعات الطلاب
         </h1>
-        <p className="text-sm text-gray-400 mt-1">
+        <p className="text-sm text-slate-500 mt-1">
           الرد المباشر على استفسارات الطلاب المشتركين، توضيح النقاط الصعبة في المذكرات، وبناء مجتمع دراسي متفوق.
         </p>
       </div>
@@ -48,61 +48,61 @@ export default function InstructorQAPage() {
           const isReplied = rev.instructorReply || submittedReplies[rev.id];
 
           return (
-            <div key={rev.id} className="p-6 rounded-3xl glass-card border border-gray-800 space-y-4">
+            <div key={rev.id} className="p-6 rounded-3xl bg-white border border-slate-200 space-y-4 shadow-sm">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div className="flex items-center gap-3">
-                  <img src={rev.userAvatar} alt={rev.userName} className="w-10 h-10 rounded-full object-cover" />
+                  <img src={rev.userAvatar} alt={rev.userName} className="w-10 h-10 rounded-full object-cover ring-1 ring-slate-200" />
                   <div>
-                    <h3 className="text-sm font-bold text-white">{rev.userName}</h3>
-                    <p className="text-xs text-cyan-400 font-medium">{rev.courseTitle}</p>
+                    <h3 className="text-sm font-bold text-slate-900">{rev.userName}</h3>
+                    <p className="text-xs text-blue-600 font-semibold">{rev.courseTitle}</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-1.5">
-                  <div className="flex items-center text-amber-400">
+                  <div className="flex items-center text-amber-500">
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-4 h-4 ${i < rev.rating ? 'fill-amber-400 text-amber-400' : 'text-gray-600'}`}
+                        className={`w-4 h-4 ${i < rev.rating ? 'fill-amber-400 text-amber-500' : 'text-slate-300'}`}
                       />
                     ))}
                   </div>
-                  <span className="text-xs text-gray-400 mr-1">
+                  <span className="text-xs text-slate-400 mr-1">
                     {new Date(rev.createdAt).toLocaleDateString('ar-EG')}
                   </span>
                 </div>
               </div>
 
-              <p className="text-xs sm:text-sm text-gray-300 leading-relaxed pr-13">
+              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed pr-13">
                 &ldquo;{rev.comment}&rdquo;
               </p>
 
               {/* رد المعلم الحالي */}
               {isReplied ? (
-                <div className="mr-6 sm:mr-12 p-4 rounded-2xl bg-indigo-950/40 border-r-2 border-cyan-500 text-xs space-y-1.5">
+                <div className="mr-6 sm:mr-12 p-4 rounded-2xl bg-blue-50/70 border-r-4 border-blue-600 text-xs space-y-1.5">
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-cyan-300">ردك كمعلم ({currentUser.name})</span>
-                    <span className="text-[10px] font-mono text-emerald-400 flex items-center gap-1">
+                    <span className="font-bold text-blue-900">ردك كمعلم ({currentUser.name})</span>
+                    <span className="text-[10px] font-mono text-emerald-600 flex items-center gap-1 font-bold">
                       <CheckCircle2 className="w-3 h-3" />
                       <span>منشور للطلاب</span>
                     </span>
                   </div>
-                  <p className="text-gray-300">{rev.instructorReply || replyTexts[rev.id]}</p>
+                  <p className="text-slate-700">{rev.instructorReply || replyTexts[rev.id]}</p>
                 </div>
               ) : (
                 /* حقل كتابة رد المعلم */
-                <div className="mr-6 sm:mr-12 pt-2 border-t border-gray-800/80">
+                <div className="mr-6 sm:mr-12 pt-2 border-t border-slate-100">
                   <div className="flex gap-2">
                     <input
                       type="text"
                       value={replyTexts[rev.id] || ''}
                       onChange={e => setReplyTexts({ ...replyTexts, [rev.id]: e.target.value })}
                       placeholder="اكتب ردك أو توضيحك على استفسار الطالب هنا..."
-                      className="flex-1 bg-gray-900 border border-gray-800 rounded-xl px-4 py-2 text-xs text-gray-200 placeholder-gray-500 focus:outline-none focus:border-cyan-400"
+                      className="flex-1 bg-white border border-slate-300 rounded-xl px-4 py-2 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                     />
                     <button
                       onClick={() => handleSendReply(rev.courseId, rev.id)}
-                      className="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs flex items-center gap-1.5 shadow-md shrink-0"
+                      className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs flex items-center gap-1.5 shadow-sm shrink-0"
                     >
                       <Send className="w-3.5 h-3.5 rotate-180" />
                       <span>نشر الرد</span>

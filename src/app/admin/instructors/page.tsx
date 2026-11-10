@@ -231,21 +231,21 @@ export default function AdminInstructorsPage() {
       {/* رأس الصفحة والإجراءات */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs font-semibold mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold mb-2">
             <GraduationCap className="w-3.5 h-3.5" />
             <span>حوكمة المعلمين وإدارة اشتراكات المنصة</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             إنشاء وإدارة اشتراكات المعلمين
           </h1>
-          <p className="text-sm text-gray-400 mt-1">
+          <p className="text-sm text-slate-500 mt-1">
             التسجيل المباشر للمعلمين محظور للعامة ومحصور بالإدارة؛ أنشئ حسابات المدرسين، حدد المواد والصفوف المسندة، واضبط فترات الصلاحية (مفتوح مدى الحياة أو محدد المدة).
           </p>
         </div>
 
         <button
           onClick={() => setCreateModalOpen(true)}
-          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-cyan-600/30 transition shrink-0"
+          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-slate-900 font-bold text-xs flex items-center gap-2 shadow-lg shadow-cyan-600/30 transition shrink-0"
         >
           <Plus className="w-4 h-4" />
           <span>إضافة معلم جديد وتحديد الصلاحية</span>
@@ -258,7 +258,7 @@ export default function AdminInstructorsPage() {
             <CheckCircle2 className="w-4 h-4 shrink-0" />
             <span>{notification}</span>
           </div>
-          <button onClick={() => setNotification(null)} className="text-emerald-400 hover:text-white">
+          <button onClick={() => setNotification(null)} className="text-emerald-400 hover:text-slate-900">
             إغلاق
           </button>
         </div>
@@ -266,57 +266,57 @@ export default function AdminInstructorsPage() {
 
       {/* بطاقات الإحصائيات السريعة */}
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-        <div className="p-5 rounded-2xl glass-card border border-gray-800">
-          <div className="text-xs text-gray-400">إجمالي المعلمين المعتمدين</div>
-          <div className="text-2xl font-extrabold text-white mt-1">{instructors.length} معلم</div>
-          <div className="text-[11px] text-cyan-400 mt-0.5">حصرياً عبر الإدارة</div>
+        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+          <div className="text-xs text-slate-500">إجمالي المعلمين المعتمدين</div>
+          <div className="text-2xl font-extrabold text-slate-900 mt-1">{instructors.length} معلم</div>
+          <div className="text-[11px] text-blue-600 mt-0.5">حصرياً عبر الإدارة</div>
         </div>
 
-        <div className="p-5 rounded-2xl glass-card border border-gray-800">
-          <div className="text-xs text-gray-400">اشتراكات مدى الحياة</div>
+        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+          <div className="text-xs text-slate-500">اشتراكات مدى الحياة</div>
           <div className="text-2xl font-extrabold text-emerald-400 mt-1">
             {instructors.filter(i => i.validityType === 'LIFETIME').length}
           </div>
           <div className="text-[11px] text-emerald-400/80 mt-0.5">صلاحية دائمة بدون انتهاء</div>
         </div>
 
-        <div className="p-5 rounded-2xl glass-card border border-gray-800">
-          <div className="text-xs text-gray-400">اشتراكات محددة المدة</div>
-          <div className="text-2xl font-extrabold text-cyan-300 mt-1">
+        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+          <div className="text-xs text-slate-500">اشتراكات محددة المدة</div>
+          <div className="text-2xl font-extrabold text-blue-700 mt-1">
             {instructors.filter(i => i.validityType === 'TIME_LIMITED' && !isInstructorExpired(i)).length}
           </div>
-          <div className="text-[11px] text-cyan-300/80 mt-0.5">تجديد فصلي وسنوي</div>
+          <div className="text-[11px] text-blue-700/80 mt-0.5">تجديد فصلي وسنوي</div>
         </div>
 
-        <div className="p-5 rounded-2xl glass-card border border-gray-800">
-          <div className="text-xs text-gray-400">منتهي الصلاحية / معلق</div>
-          <div className="text-2xl font-extrabold text-rose-400 mt-1">
+        <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+          <div className="text-xs text-slate-500">منتهي الصلاحية / معلق</div>
+          <div className="text-2xl font-extrabold text-blue-600 mt-1">
             {instructors.filter(i => isInstructorExpired(i) || i.status === 'SUSPENDED').length}
           </div>
-          <div className="text-[11px] text-rose-400/80 mt-0.5">يتطلب تمديد أو مراجعة</div>
+          <div className="text-[11px] text-blue-600/80 mt-0.5">يتطلب تمديد أو مراجعة</div>
         </div>
       </div>
 
       {/* شريط البحث والتصفية */}
-      <div className="p-4 rounded-2xl glass-card border border-gray-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="relative flex-1 max-w-md">
-          <Search className="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-slate-500 absolute right-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             placeholder="بحث بالاسم، البريد الإلكتروني، أو رقم الهاتف..."
-            className="w-full bg-gray-900 border border-gray-800 rounded-xl pr-9 pl-4 py-2 text-xs text-gray-200 placeholder-gray-500 focus:outline-none focus:border-cyan-400"
+            className="w-full bg-white border border-slate-200 rounded-xl pr-9 pl-4 py-2 text-xs text-slate-800 placeholder-gray-500 focus:outline-none focus:border-blue-500"
           />
         </div>
 
-        <div className="flex items-center gap-2 text-xs text-gray-400">
+        <div className="flex items-center gap-2 text-xs text-slate-500">
           <Filter className="w-3.5 h-3.5" />
           <span>تصفية الصلاحية:</span>
           <select
             value={filterValidity}
             onChange={e => setFilterValidity(e.target.value)}
-            className="bg-gray-900 border border-gray-800 rounded-lg px-2.5 py-1.5 text-xs text-gray-200 focus:outline-none focus:border-cyan-400"
+            className="bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-blue-500"
           >
             <option value="ALL">جميع المعلمين</option>
             <option value="ACTIVE">نشط وساري الصلاحية</option>
@@ -327,10 +327,10 @@ export default function AdminInstructorsPage() {
       </div>
 
       {/* جدول المعلمين وصلاحياتهم */}
-      <div className="rounded-3xl glass-card border border-gray-800 overflow-hidden shadow-xl">
+      <div className="rounded-3xl bg-white border border-slate-200 shadow-sm overflow-hidden shadow-xl">
         <div className="overflow-x-auto">
           <table className="w-full text-right text-xs">
-            <thead className="bg-gray-900/80 text-gray-400 uppercase tracking-wider text-[10px] border-b border-gray-800">
+            <thead className="bg-white/80 text-slate-500 uppercase tracking-wider text-[10px] border-b border-slate-200">
               <tr>
                 <th className="py-3.5 px-4">المعلم</th>
                 <th className="py-3.5 px-4">المواد المسندة</th>
@@ -340,7 +340,7 @@ export default function AdminInstructorsPage() {
                 <th className="py-3.5 px-4 text-left">الإجراءات</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800 text-gray-300">
+            <tbody className="divide-y divide-gray-800 text-slate-700">
               {filteredInstructors.map(inst => {
                 const isLifetime = inst.validityType === 'LIFETIME';
                 const isExpired = isInstructorExpired(inst);
@@ -348,8 +348,8 @@ export default function AdminInstructorsPage() {
                 const isSuspended = inst.status === 'SUSPENDED';
 
                 return (
-                  <tr key={inst.id} className="hover:bg-gray-800/40 transition">
-                    <td className="py-3.5 px-4">
+                  <tr key={inst.id} className="hover:bg-slate-50 transition">
+                    <td suppressHydrationWarning className="py-3.5 px-4">
                       <div className="flex items-center gap-3">
                         <img
                           src={inst.avatar}
@@ -357,18 +357,18 @@ export default function AdminInstructorsPage() {
                           className="w-10 h-10 rounded-2xl object-cover ring-2 ring-gray-700 shrink-0"
                         />
                         <div>
-                          <div className="font-bold text-white flex items-center gap-1.5">
+                          <div className="font-bold text-slate-900 flex items-center gap-1.5">
                             <span>{inst.name}</span>
                             {isSuspended && (
-                              <span className="text-[9px] bg-rose-500/20 text-rose-300 px-1.5 py-0.2 rounded font-bold">
+                              <span className="text-[9px] bg-rose-500/20 text-blue-700 px-1.5 py-0.2 rounded font-bold">
                                 موقوف
                               </span>
                             )}
                           </div>
-                          <div className="text-[11px] text-gray-400 flex items-center gap-2 mt-0.5">
+                          <div className="text-[11px] text-slate-500 flex items-center gap-2 mt-0.5">
                             <span className="font-mono">{inst.email}</span>
                             {inst.phone && (
-                              <span className="text-cyan-400 font-mono flex items-center gap-1">
+                              <span className="text-blue-600 font-mono flex items-center gap-1">
                                 <Phone className="w-3 h-3" />
                                 <span>{inst.phone}</span>
                               </span>
@@ -378,7 +378,7 @@ export default function AdminInstructorsPage() {
                       </div>
                     </td>
 
-                    <td className="py-3.5 px-4">
+                    <td suppressHydrationWarning className="py-3.5 px-4">
                       <div className="flex flex-wrap gap-1">
                         {inst.assignedSubjectIds && inst.assignedSubjectIds.length > 0 ? (
                           inst.assignedSubjectIds.map(subId => {
@@ -386,7 +386,7 @@ export default function AdminInstructorsPage() {
                             return (
                               <span
                                 key={subId}
-                                className="text-[10px] font-bold px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30"
+                                className="text-[10px] font-bold px-2 py-0.5 rounded bg-cyan-500/15 text-blue-700 border border-cyan-500/30"
                               >
                                 {sub?.nameAr || subId}
                               </span>
@@ -398,13 +398,13 @@ export default function AdminInstructorsPage() {
                       </div>
                     </td>
 
-                    <td className="py-3.5 px-4">
+                    <td suppressHydrationWarning className="py-3.5 px-4">
                       <div className="flex flex-wrap gap-1">
                         {inst.assignedGradeIds && inst.assignedGradeIds.length > 0 ? (
                           inst.assignedGradeIds.map(gid => (
                             <span
                               key={gid}
-                              className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-gray-800 text-gray-300 border border-gray-700"
+                              className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-gray-800 text-slate-700 border border-gray-700"
                             >
                               {gid === 'grade_sec_3'
                                 ? '3 ثانوي'
@@ -419,31 +419,31 @@ export default function AdminInstructorsPage() {
                       </div>
                     </td>
 
-                    <td className="py-3.5 px-4">
+                    <td suppressHydrationWarning className="py-3.5 px-4">
                       {isLifetime ? (
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold border border-emerald-500/30">
                           <Sparkles className="w-3 h-3 text-emerald-400" />
                           <span>دائم (مدى الحياة)</span>
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-[10px] font-bold border border-cyan-500/30">
-                          <Clock className="w-3 h-3 text-cyan-400" />
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/20 text-blue-700 text-[10px] font-bold border border-cyan-500/30">
+                          <Clock className="w-3 h-3 text-blue-600" />
                           <span>{inst.validityDurationLabel || 'محدد المدة'}</span>
                         </span>
                       )}
                     </td>
 
-                    <td className="py-3.5 px-4">
+                    <td suppressHydrationWarning className="py-3.5 px-4">
                       {isLifetime ? (
                         <div>
                           <span className="text-xs text-emerald-400 font-bold block">نشط دائم (مدى الحياة)</span>
-                          <span className="text-[10px] text-gray-400 font-mono block mt-0.5">
+                          <span className="text-[10px] text-slate-500 font-mono block mt-0.5">
                             مشترك منذ: {Math.max(1, Math.floor(((mountedTime || new Date(inst.joinedAt || '2023-01-01').getTime()) - new Date(inst.joinedAt || '2023-01-01').getTime()) / (1000 * 3600 * 24 * 30)))} شهر
                           </span>
                         </div>
                       ) : isExpired ? (
                         <div>
-                          <div className="text-rose-400 font-bold text-xs flex items-center gap-1">
+                          <div className="text-blue-600 font-bold text-xs flex items-center gap-1">
                             <AlertTriangle className="w-3.5 h-3.5" />
                             <span>منتهي الصلاحية</span>
                           </div>
@@ -453,8 +453,8 @@ export default function AdminInstructorsPage() {
                         </div>
                       ) : (
                         <div>
-                          <div className="text-xs font-bold text-white flex items-center gap-1 font-mono">
-                            <Calendar className="w-3.5 h-3.5 text-cyan-400" />
+                          <div className="text-xs font-bold text-slate-900 flex items-center gap-1 font-mono">
+                            <Calendar className="w-3.5 h-3.5 text-blue-600" />
                             <span>
                               ينتهي في: {inst.validityExpiresAt
                                 ? new Date(inst.validityExpiresAt).toLocaleDateString('ar-EG')
@@ -466,7 +466,7 @@ export default function AdminInstructorsPage() {
                               متبقي: {remaining} يوم
                             </div>
                           )}
-                          <div className="text-[10px] text-gray-400 font-mono mt-0.5">
+                          <div className="text-[10px] text-slate-500 font-mono mt-0.5">
                             مشترك منذ: {Math.max(1, Math.floor(((mountedTime || new Date(inst.joinedAt || '2023-01-01').getTime()) - new Date(inst.joinedAt || '2023-01-01').getTime()) / (1000 * 3600 * 24 * 30)))} شهر
                           </div>
                         </div>
@@ -477,7 +477,7 @@ export default function AdminInstructorsPage() {
                       <div className="flex items-center justify-end gap-1.5">
                         <button
                           onClick={() => handleOpenEdit(inst)}
-                          className="px-2.5 py-1 rounded-lg bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-white border border-indigo-500/30 text-[11px] font-bold transition flex items-center gap-1"
+                          className="px-2.5 py-1 rounded-lg bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-slate-900 border border-indigo-500/30 text-[11px] font-bold transition flex items-center gap-1"
                           title="تمديد أو تعديل الصلاحية"
                         >
                           <RotateCcw className="w-3 h-3" />
@@ -498,7 +498,7 @@ export default function AdminInstructorsPage() {
 
                         <button
                           onClick={() => handleImpersonate(inst)}
-                          className="px-2.5 py-1 rounded-lg bg-gray-800 hover:bg-cyan-600 text-gray-300 hover:text-white text-[11px] font-bold transition"
+                          className="px-2.5 py-1 rounded-lg bg-gray-800 hover:bg-cyan-600 text-slate-700 hover:text-slate-900 text-[11px] font-bold transition"
                           title="تسجيل الدخول كمعلم"
                         >
                           <span>دخول كمعلم</span>
@@ -516,78 +516,78 @@ export default function AdminInstructorsPage() {
       {/* نافذة إنشاء معلم جديد (Admin Only) */}
       {createModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="w-full max-w-xl rounded-3xl glass-card border border-cyan-500/40 p-6 sm:p-7 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+          <div className="w-full max-w-xl rounded-3xl bg-white border border-slate-200 shadow-sm border border-cyan-500/40 p-6 sm:p-7 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setCreateModalOpen(false)}
-              className="absolute top-4 left-4 p-2 rounded-xl bg-gray-800 text-gray-400 hover:text-white"
+              className="absolute top-4 left-4 p-2 rounded-xl bg-gray-800 text-slate-500 hover:text-slate-900"
             >
               <X className="w-5 h-5" />
             </button>
 
             <div className="flex items-center gap-3 mb-5 pl-8">
-              <div className="w-12 h-12 rounded-2xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-cyan-500/20 text-blue-600 flex items-center justify-center shrink-0">
                 <GraduationCap className="w-6 h-6" />
               </div>
               <div>
-                <h2 className="text-lg font-extrabold text-white">إضافة معلم جديد وتحديد مدة الاشتراك</h2>
-                <p className="text-xs text-gray-400">التسجيل محصور بالإدارة؛ لن يتمكن المعلم من الدخول إلا بالبيانات التي تنشئها هنا.</p>
+                <h2 className="text-lg font-extrabold text-slate-900">إضافة معلم جديد وتحديد مدة الاشتراك</h2>
+                <p className="text-xs text-slate-500">التسجيل محصور بالإدارة؛ لن يتمكن المعلم من الدخول إلا بالبيانات التي تنشئها هنا.</p>
               </div>
             </div>
 
             <form onSubmit={handleCreateSubmit} className="space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-gray-300 font-semibold block mb-1">اسم المعلم بالكامل *</label>
+                  <label className="text-slate-700 font-semibold block mb-1">اسم المعلم بالكامل *</label>
                   <input
                     type="text"
                     required
                     value={newName}
                     onChange={e => setNewName(e.target.value)}
                     placeholder="مثال: الأستاذ طارق علام"
-                    className="w-full bg-gray-900 border border-gray-800 rounded-xl px-3.5 py-2 text-white focus:outline-none focus:border-cyan-400"
+                    className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-slate-900 focus:outline-none focus:border-blue-500"
                   />
                 </div>
 
                 <div>
-                  <label className="text-gray-300 font-semibold block mb-1">البريد الإلكتروني المهني *</label>
+                  <label className="text-slate-700 font-semibold block mb-1">البريد الإلكتروني المهني *</label>
                   <input
                     type="email"
                     required
                     value={newEmail}
                     onChange={e => setNewEmail(e.target.value)}
                     placeholder="tarek.allam@ya7edu.com"
-                    className="w-full bg-gray-900 border border-gray-800 rounded-xl px-3.5 py-2 text-white font-mono focus:outline-none focus:border-cyan-400"
+                    className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-slate-900 font-mono focus:outline-none focus:border-blue-500"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-gray-300 font-semibold block mb-1">رقم الهاتف / الواتساب</label>
+                  <label className="text-slate-700 font-semibold block mb-1">رقم الهاتف / الواتساب</label>
                   <input
                     type="tel"
                     value={newPhone}
                     onChange={e => setNewPhone(e.target.value)}
                     placeholder="010xxxxxxxx"
-                    className="w-full bg-gray-900 border border-gray-800 rounded-xl px-3.5 py-2 text-white font-mono focus:outline-none focus:border-cyan-400"
+                    className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-slate-900 font-mono focus:outline-none focus:border-blue-500"
                   />
                 </div>
 
                 <div>
-                  <label className="text-gray-300 font-semibold block mb-1">كلمة المرور الابتدائية *</label>
+                  <label className="text-slate-700 font-semibold block mb-1">كلمة المرور الابتدائية *</label>
                   <input
                     type="text"
                     required
                     value={newPassword}
                     onChange={e => setNewPassword(e.target.value)}
-                    className="w-full bg-gray-900 border border-gray-800 rounded-xl px-3.5 py-2 text-white font-mono focus:outline-none focus:border-cyan-400"
+                    className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2 text-slate-900 font-mono focus:outline-none focus:border-blue-500"
                   />
                 </div>
               </div>
 
               {/* الصفوف الدراسية المسندة */}
               <div>
-                <label className="text-gray-300 font-semibold block mb-1.5">
+                <label className="text-slate-700 font-semibold block mb-1.5">
                   الصفوف الدراسية المصرح للمعلم بالتدريس لها:
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -608,8 +608,8 @@ export default function AdminInstructorsPage() {
                         }}
                         className={`p-2 rounded-xl border text-center transition font-bold ${
                           isChecked
-                            ? 'bg-cyan-500/20 border-cyan-400 text-white'
-                            : 'bg-gray-900 border-gray-800 text-gray-400 hover:text-white'
+                            ? 'bg-cyan-500/20 border-cyan-400 text-slate-900'
+                            : 'bg-white border-slate-200 text-slate-500 hover:text-slate-900'
                         }`}
                       >
                         {g.nameAr}
@@ -621,7 +621,7 @@ export default function AdminInstructorsPage() {
 
               {/* المواد المسندة */}
               <div>
-                <label className="text-gray-300 font-semibold block mb-1.5">المواد التخصصية المسندة للمعلم:</label>
+                <label className="text-slate-700 font-semibold block mb-1.5">المواد التخصصية المسندة للمعلم:</label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {(allSubjects || mockSubjects).map(sub => {
                     const isChecked = selectedSubjects.includes(sub.id);
@@ -640,8 +640,8 @@ export default function AdminInstructorsPage() {
                         }}
                         className={`p-2 rounded-xl border text-center transition font-semibold ${
                           isChecked
-                            ? 'bg-indigo-600/30 border-indigo-400 text-white'
-                            : 'bg-gray-900 border-gray-800 text-gray-400 hover:text-white'
+                            ? 'bg-indigo-600/30 border-indigo-400 text-slate-900'
+                            : 'bg-white border-slate-200 text-slate-500 hover:text-slate-900'
                         }`}
                       >
                         {sub.nameAr}
@@ -652,8 +652,8 @@ export default function AdminInstructorsPage() {
               </div>
 
               {/* نوع وصلاحية اشتراك المعلم في المنصة */}
-              <div className="p-4 rounded-2xl bg-gray-900/80 border border-gray-800 space-y-3">
-                <label className="text-white font-bold block">
+              <div className="p-4 rounded-2xl bg-white/80 border border-slate-200 space-y-3">
+                <label className="text-slate-900 font-bold block">
                   صلاحية حساب المعلم على منصة YA7EDU:
                 </label>
 
@@ -663,15 +663,15 @@ export default function AdminInstructorsPage() {
                     onClick={() => setNewValidityType('LIFETIME')}
                     className={`p-3 rounded-xl border text-right transition ${
                       newValidityType === 'LIFETIME'
-                        ? 'bg-emerald-500/20 border-emerald-400 text-white font-bold'
-                        : 'bg-gray-900 border-gray-800 text-gray-400 hover:text-white'
+                        ? 'bg-emerald-500/20 border-emerald-400 text-slate-900 font-bold'
+                        : 'bg-white border-slate-200 text-slate-500 hover:text-slate-900'
                     }`}
                   >
                     <div className="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
                       <Sparkles className="w-3.5 h-3.5" />
                       <span>مفتوح مدى الحياة</span>
                     </div>
-                    <div className="text-[10px] text-gray-400 mt-1">صلاحية غير مقيدة بتاريخ انتهاء</div>
+                    <div className="text-[10px] text-slate-500 mt-1">صلاحية غير مقيدة بتاريخ انتهاء</div>
                   </button>
 
                   <button
@@ -679,21 +679,21 @@ export default function AdminInstructorsPage() {
                     onClick={() => setNewValidityType('TIME_LIMITED')}
                     className={`p-3 rounded-xl border text-right transition ${
                       newValidityType === 'TIME_LIMITED'
-                        ? 'bg-cyan-500/20 border-cyan-400 text-white font-bold'
-                        : 'bg-gray-900 border-gray-800 text-gray-400 hover:text-white'
+                        ? 'bg-cyan-500/20 border-cyan-400 text-slate-900 font-bold'
+                        : 'bg-white border-slate-200 text-slate-500 hover:text-slate-900'
                     }`}
                   >
-                    <div className="text-xs font-bold text-cyan-400 flex items-center gap-1.5">
+                    <div className="text-xs font-bold text-blue-600 flex items-center gap-1.5">
                       <Clock className="w-3.5 h-3.5" />
                       <span>محدد المدة (اشتراك ساري)</span>
                     </div>
-                    <div className="text-[10px] text-gray-400 mt-1">شهر / ترم / سنة دراسية</div>
+                    <div className="text-[10px] text-slate-500 mt-1">شهر / ترم / سنة دراسية</div>
                   </button>
                 </div>
 
                 {newValidityType === 'TIME_LIMITED' && (
-                  <div className="pt-2 border-t border-gray-800/80 space-y-2">
-                    <label className="text-gray-300 font-semibold block text-[11px]">مدة الصلاحية الابتدائية:</label>
+                  <div className="pt-2 border-t border-slate-200/80 space-y-2">
+                    <label className="text-slate-700 font-semibold block text-[11px]">مدة الصلاحية الابتدائية:</label>
                     <div className="grid grid-cols-4 gap-2">
                       {[
                         { id: '1_MONTH', label: 'شهر' },
@@ -707,8 +707,8 @@ export default function AdminInstructorsPage() {
                           onClick={() => setNewDurationPreset(item.id as any)}
                           className={`py-1.5 px-2 rounded-lg text-center font-bold text-[11px] transition ${
                             newDurationPreset === item.id
-                              ? 'bg-cyan-500 text-gray-950 shadow-md'
-                              : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                              ? 'bg-blue-600 text-slate-900 shadow-md'
+                              : 'bg-gray-800 text-slate-700 hover:bg-gray-700'
                           }`}
                         >
                           {item.label}
@@ -718,12 +718,12 @@ export default function AdminInstructorsPage() {
 
                     {newDurationPreset === 'CUSTOM' && (
                       <div className="pt-2">
-                        <label className="text-gray-400 text-[10px] block mb-1">حدد تاريخ انتهاء الصلاحية:</label>
+                        <label className="text-slate-500 text-[10px] block mb-1">حدد تاريخ انتهاء الصلاحية:</label>
                         <input
                           type="date"
                           value={newCustomDate}
                           onChange={e => setNewCustomDate(e.target.value)}
-                          className="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-1.5 text-white font-mono text-xs focus:outline-none focus:border-cyan-400"
+                          className="w-full bg-white border border-gray-700 rounded-xl px-3 py-1.5 text-slate-900 font-mono text-xs focus:outline-none focus:border-blue-500"
                         />
                       </div>
                     )}
@@ -735,13 +735,13 @@ export default function AdminInstructorsPage() {
                 <button
                   type="button"
                   onClick={() => setCreateModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-gray-800 text-gray-300 font-bold hover:bg-gray-700"
+                  className="px-4 py-2 rounded-xl bg-gray-800 text-slate-700 font-bold hover:bg-gray-700"
                 >
                   إلغاء
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white font-bold shadow-lg shadow-cyan-600/30"
+                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-slate-900 font-bold shadow-lg shadow-cyan-600/30"
                 >
                   إنشاء حساب المعلم واعتماده
                 </button>
@@ -754,10 +754,10 @@ export default function AdminInstructorsPage() {
       {/* نافذة تعديل وتمديد الصلاحية للمعلم (Edit / Renew) */}
       {editModalOpen && selectedInstructorForEdit && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="w-full max-w-lg rounded-3xl glass-card border border-indigo-500/40 p-6 sm:p-7 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+          <div className="w-full max-w-lg rounded-3xl bg-white border border-slate-200 shadow-sm border border-indigo-500/40 p-6 sm:p-7 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setEditModalOpen(false)}
-              className="absolute top-4 left-4 p-2 rounded-xl bg-gray-800 text-gray-400 hover:text-white"
+              className="absolute top-4 left-4 p-2 rounded-xl bg-gray-800 text-slate-500 hover:text-slate-900"
             >
               <X className="w-5 h-5" />
             </button>
@@ -769,16 +769,16 @@ export default function AdminInstructorsPage() {
                 className="w-12 h-12 rounded-2xl object-cover ring-2 ring-indigo-500/40 shrink-0"
               />
               <div>
-                <h2 className="text-base font-extrabold text-white">
+                <h2 className="text-base font-extrabold text-slate-900">
                   تجديد صلاحية وتعديل اشتراك: {selectedInstructorForEdit.name}
                 </h2>
-                <p className="text-xs text-gray-400 font-mono">{selectedInstructorForEdit.email}</p>
+                <p className="text-xs text-slate-500 font-mono">{selectedInstructorForEdit.email}</p>
               </div>
             </div>
 
             <form onSubmit={handleEditSubmit} className="space-y-4 text-xs">
-              <div className="p-4 rounded-2xl bg-gray-900/80 border border-gray-800 space-y-3">
-                <label className="text-white font-bold block">اختر نوع الصلاحية المحدثة:</label>
+              <div className="p-4 rounded-2xl bg-white/80 border border-slate-200 space-y-3">
+                <label className="text-slate-900 font-bold block">اختر نوع الصلاحية المحدثة:</label>
 
                 <div className="grid grid-cols-2 gap-3">
                   <button
@@ -786,15 +786,15 @@ export default function AdminInstructorsPage() {
                     onClick={() => setEditValidityType('LIFETIME')}
                     className={`p-3 rounded-xl border text-right transition ${
                       editValidityType === 'LIFETIME'
-                        ? 'bg-emerald-500/20 border-emerald-400 text-white font-bold'
-                        : 'bg-gray-900 border-gray-800 text-gray-400 hover:text-white'
+                        ? 'bg-emerald-500/20 border-emerald-400 text-slate-900 font-bold'
+                        : 'bg-white border-slate-200 text-slate-500 hover:text-slate-900'
                     }`}
                   >
                     <div className="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
                       <Sparkles className="w-3.5 h-3.5" />
                       <span>ترقية لمدى الحياة</span>
                     </div>
-                    <div className="text-[10px] text-gray-400 mt-1">بدون تاريخ انتهاء</div>
+                    <div className="text-[10px] text-slate-500 mt-1">بدون تاريخ انتهاء</div>
                   </button>
 
                   <button
@@ -802,21 +802,21 @@ export default function AdminInstructorsPage() {
                     onClick={() => setEditValidityType('TIME_LIMITED')}
                     className={`p-3 rounded-xl border text-right transition ${
                       editValidityType === 'TIME_LIMITED'
-                        ? 'bg-cyan-500/20 border-cyan-400 text-white font-bold'
-                        : 'bg-gray-900 border-gray-800 text-gray-400 hover:text-white'
+                        ? 'bg-cyan-500/20 border-cyan-400 text-slate-900 font-bold'
+                        : 'bg-white border-slate-200 text-slate-500 hover:text-slate-900'
                     }`}
                   >
-                    <div className="text-xs font-bold text-cyan-400 flex items-center gap-1.5">
+                    <div className="text-xs font-bold text-blue-600 flex items-center gap-1.5">
                       <Clock className="w-3.5 h-3.5" />
                       <span>تمديد محدد المدة</span>
                     </div>
-                    <div className="text-[10px] text-gray-400 mt-1">إضافة شهر / ترم / سنة</div>
+                    <div className="text-[10px] text-slate-500 mt-1">إضافة شهر / ترم / سنة</div>
                   </button>
                 </div>
 
                 {editValidityType === 'TIME_LIMITED' && (
-                  <div className="pt-2 border-t border-gray-800/80 space-y-2">
-                    <label className="text-gray-300 font-semibold block text-[11px]">فترة التمديد:</label>
+                  <div className="pt-2 border-t border-slate-200/80 space-y-2">
+                    <label className="text-slate-700 font-semibold block text-[11px]">فترة التمديد:</label>
                     <div className="grid grid-cols-4 gap-2">
                       {[
                         { id: '1_MONTH', label: '+ شهر' },
@@ -830,8 +830,8 @@ export default function AdminInstructorsPage() {
                           onClick={() => setEditDurationPreset(item.id as any)}
                           className={`py-1.5 px-2 rounded-lg text-center font-bold text-[11px] transition ${
                             editDurationPreset === item.id
-                              ? 'bg-cyan-500 text-gray-950 shadow-md'
-                              : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                              ? 'bg-blue-600 text-slate-900 shadow-md'
+                              : 'bg-gray-800 text-slate-700 hover:bg-gray-700'
                           }`}
                         >
                           {item.label}
@@ -841,12 +841,12 @@ export default function AdminInstructorsPage() {
 
                     {editDurationPreset === 'CUSTOM' && (
                       <div className="pt-2">
-                        <label className="text-gray-400 text-[10px] block mb-1">حدد تاريخ الانتهاء الجديد:</label>
+                        <label className="text-slate-500 text-[10px] block mb-1">حدد تاريخ الانتهاء الجديد:</label>
                         <input
                           type="date"
                           value={editCustomDate}
                           onChange={e => setEditCustomDate(e.target.value)}
-                          className="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-1.5 text-white font-mono text-xs focus:outline-none focus:border-cyan-400"
+                          className="w-full bg-white border border-gray-700 rounded-xl px-3 py-1.5 text-slate-900 font-mono text-xs focus:outline-none focus:border-blue-500"
                         />
                       </div>
                     )}
@@ -856,7 +856,7 @@ export default function AdminInstructorsPage() {
 
               {/* تعديل الصفوف */}
               <div>
-                <label className="text-gray-300 font-semibold block mb-1.5">الصفوف الدراسية المصرحة:</label>
+                <label className="text-slate-700 font-semibold block mb-1.5">الصفوف الدراسية المصرحة:</label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {(academicGrades || mockAcademicGrades).map(g => {
                     const isChecked = editGrades.includes(g.id as AcademicGradeId);
@@ -875,8 +875,8 @@ export default function AdminInstructorsPage() {
                         }}
                         className={`p-2 rounded-xl border text-center transition font-bold ${
                           isChecked
-                            ? 'bg-cyan-500/20 border-cyan-400 text-white'
-                            : 'bg-gray-900 border-gray-800 text-gray-400'
+                            ? 'bg-cyan-500/20 border-cyan-400 text-slate-900'
+                            : 'bg-white border-slate-200 text-slate-500'
                         }`}
                       >
                         {g.nameAr}
@@ -891,13 +891,13 @@ export default function AdminInstructorsPage() {
                 <div className="flex items-center gap-2 text-emerald-300">
                   <MessageCircle className="w-4 h-4 text-emerald-400" />
                   <span>خط واتساب التجديد المعتمد للمنصة:</span>
-                  <strong className="font-mono text-white text-xs">01090138676</strong>
+                  <strong className="font-mono text-slate-900 text-xs">01090138676</strong>
                 </div>
                 <a
                   href={`https://wa.me/201090138676?text=${encodeURIComponent(`تجديد اشتراك المعلم: ${selectedInstructorForEdit.name} (${selectedInstructorForEdit.email})`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] flex items-center gap-1 transition"
+                  className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-900 font-bold text-[11px] flex items-center gap-1 transition"
                 >
                   <MessageCircle className="w-3 h-3" />
                   <span>فتح محادثة واتساب</span>
@@ -908,13 +908,13 @@ export default function AdminInstructorsPage() {
                 <button
                   type="button"
                   onClick={() => setEditModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-gray-800 text-gray-300 font-bold hover:bg-gray-700"
+                  className="px-4 py-2 rounded-xl bg-gray-800 text-slate-700 font-bold hover:bg-gray-700"
                 >
                   إلغاء
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-600/30"
+                  className="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-slate-900 font-bold shadow-lg shadow-indigo-600/30"
                 >
                   حفظ وتطبيق التمديد
                 </button>
